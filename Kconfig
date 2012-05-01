@@ -1,0 +1,19 @@
+mainmenu "DPA calc"
+config  DONE
+        bool
+	default y
+menu "Basic settings"
+
+  config BATCH_SIZE 
+	  int "How many samples should I process in a row?"
+	  default 5
+	  ---help---
+	  5 for tests, in "real life" it should be much bigger
+  choice
+	prompt "Matrix data type"
+    config TRACETYPE_FLOAT
+	    bool "Float"
+    config TRACETYPE_DOUBLE
+	    bool "Double"
+  endchoice
+endmenu
