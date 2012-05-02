@@ -5,7 +5,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/../cmake)
 INCLUDE (${CMAKE_SOURCE_DIR}/../dpacalc-config.cmake)
 
 find_package(Eigen REQUIRED)
-include_directories(${Eigen_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR})
+include_directories(${EIGEN_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR})
 set( CMAKE_CXX_FLAGS "-O2 -std=c++0x -Wall -Werror -g") 
 FILE(GLOB inputsources input/*.cpp)
 FILE(GLOB keygensources keygen/*.cpp)
