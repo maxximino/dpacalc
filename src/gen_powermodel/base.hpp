@@ -1,7 +1,5 @@
-#include <iostream>
-#include <Eigen/Dense>
-#include <memory>
-#include "config.h"
+#pragma once
+#include "dpacalc.h"
 using namespace Eigen;
 using namespace std;
 namespace GeneratePowerModel {

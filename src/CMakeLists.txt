@@ -14,5 +14,6 @@ FILE(GLOB powermodelsources gen_powermodel/*.cpp)
 FILE(GLOB statisticsources statisticaltests/*.cpp)
 
 configure_file( config.h.in ${CMAKE_SOURCE_DIR}/config.h)
+configure_file( includes.h.in ${CMAKE_SOURCE_DIR}/includes.h)
 set(DPACALC_SRCS main.cpp ${inputsources} ${keygensources} ${intermediatesources} ${powermodelsources} )# ${statisticsources} )
 add_executable(dpacalc ${DPACALC_SRCS})

@@ -1,32 +1,21 @@
 #pragma once
+
 #define BATCH_SIZE ${CONFIG_BATCH_SIZE}
+
 #cmakedefine CONFIG_TRACETYPE_FLOAT
 #cmakedefine CONFIG_TRACETYPE_DOUBLE
-#ifdef CONFIG_TRACETYPE_FLOAT
+
+#if defined(CONFIG_TRACETYPE_FLOAT)
 typedef float TraceValueType;
-#else
-#ifdef CONFIG_TRACETYPE_DOUBLE
+#elif defined(CONFIG_TRACETYPE_DOUBLE)
 typedef double TraceValueType;
 #endif
-#endif
 
-#define DATATYPE long
-#define INPUTCLASS bin1
-#define KEYGENCLASS keygen1
-#define GENINTERMCLASS int1
-#define GENPOWERMODELCLASS pm1
-#define KEY_HYP_BIT 3
-
+#define INPUTCLASS ${CONFIG_CLASS_INPUT}
+#define KEYGENCLASS ${CONFIG_CLASS_KEYGEN}
+#define GENINTERMCLASS ${CONFIG_CLASS_INTERMEDIATE}
+#define GENPOWERMODELCLASS ${CONFIG_CLASS_POWERMODEL}
+#define KEY_HYP_BIT ${CONFIG_KEY_HYPOTESIS}
+#define DATA_SIZE_BIT ${CONFIG_KNOWNDATA_BITS}
 
 
-
-#define KEYNUM (1 <<KEY_HYP_BIT)
-
-typedef unsigned long long KeyDataType;
-typedef unsigned long long KeyIndexType;
-typedef unsigned long long IntermediateValueType;
-#include <Eigen/Dense>
-typedef Eigen::Matrix<TraceValueType,BATCH_SIZE,Eigen::Dynamic> TracesMatrix;
-typedef Eigen::Matrix<DATATYPE,BATCH_SIZE,1> DataMatrix;
-typedef Eigen::Matrix<IntermediateValueType,BATCH_SIZE,KEYNUM> IntermediateValueMatrix;
-typedef Eigen::Matrix<TraceValueType,BATCH_SIZE,KEYNUM> PowerModelMatrix;

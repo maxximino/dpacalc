@@ -1,11 +1,12 @@
+#include "dpacalc.h"
 #include "int1.hpp"
-#include "config.h"
-#include "keygen/keygen1.hpp"
-#include <mutex>
-#include <Eigen/Dense>
 void GenerateIntermediateValues::int1::generate(shared_ptr<DataMatrix> &knowndata,shared_ptr<IntermediateValueMatrix> &intval)
 {
-    for(KeyIndexType i=0; i < KEYNUM ; ++i) {
-        intval->col(i) = knowndata->cast<IntermediateValueType>() *2* keygen->getKeyFromIndex(i);
+    //unsigned long tmp;
+    for(long trcidx = 0; trcidx < intval->rows(); trcidx++) {
+        for(KeyIndexType keyidx=0; keyidx < KEYNUM ; ++keyidx) {
+
+            (*intval)(trcidx,keyidx) = (*knowndata)[trcidx].count() * keygen->getKeyFromIndex(keyidx);
+        }
     }
 }

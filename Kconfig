@@ -9,6 +9,13 @@ menu "Basic settings"
 	  default 5
 	  ---help---
 	  5 for tests, in "real life" it should be much bigger
+  config KEY_HYPOTESIS
+	  int "How many bits of the key should I try to guess?"
+	  default 3
+  config KNOWNDATA_BITS
+	  int "How large is the plain/ciphertext? (bits)"
+	  default 64
+	  
   choice
 	prompt "Matrix data type"
     config TRACETYPE_FLOAT
@@ -16,4 +23,24 @@ menu "Basic settings"
     config TRACETYPE_DOUBLE
 	    bool "Double"
   endchoice
+endmenu
+menu "Class choices"  
+  
+ 
+config CLASS_INPUT
+	  string "Name of the class that parses the input file"
+	  default "bin1"
+  
+config CLASS_KEYGEN
+	  string "Name of the class that associates key index to real key value"
+	  default "keygen1"
+  
+config CLASS_INTERMEDIATE
+	  string "Name of the class that computes the intermediate value"
+	  default "int1"
+  
+config CLASS_POWERMODEL
+	  string "Name of the class that computes the power model"
+	  default "pm1"
+  
 endmenu

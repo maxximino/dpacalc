@@ -1,9 +1,7 @@
+#pragma once
 #include <iostream>
-#include <Eigen/Dense>
 #include <mutex>
-#include <memory>
-#include <keygen/keygen1.hpp>
-#include "config.h"
+#include "dpacalc.h"
 using namespace Eigen;
 using namespace std;
 namespace GenerateIntermediateValues {
