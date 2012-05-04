@@ -42,5 +42,9 @@ config CLASS_INTERMEDIATE
 config CLASS_POWERMODEL
 	  string "Name of the class that computes the power model"
 	  default "pm1"
+
+config CLASS_STATISTIC
+	  string "Name of the class that computes statistic tests"
+	  default "pearson"
   
 endmenu

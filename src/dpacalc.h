@@ -15,7 +15,7 @@ typedef unsigned long long KeyDataType;
 typedef unsigned long long KeyIndexType;
 typedef unsigned long long IntermediateValueType;
 
-typedef Eigen::Matrix<TraceValueType,BATCH_SIZE,Eigen::Dynamic> TracesMatrix;
+typedef Eigen::Matrix<TraceValueType,Eigen::Dynamic,BATCH_SIZE> TracesMatrix;
 typedef std::vector< std::bitset<DATA_SIZE_BIT> > DataMatrix;
 typedef Eigen::Matrix<IntermediateValueType,Eigen::Dynamic,KEYNUM> IntermediateValueMatrix;
 typedef Eigen::Matrix<TraceValueType,Eigen::Dynamic,KEYNUM> PowerModelMatrix;

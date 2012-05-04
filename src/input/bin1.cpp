@@ -1,5 +1,5 @@
 #include "bin1.hpp"
-#include <mutex>
+#include <algorithm>
 //Here we can implement some sort of disk prefetching.
 long long unsigned int SamplesInput::bin1::read(long long unsigned int num, long long unsigned int* id, shared_ptr< TracesMatrix >* traces)
 {
@@ -9,10 +9,8 @@ long long unsigned int SamplesInput::bin1::read(long long unsigned int num, long
         input_mutex.unlock();
         return 0;
     }
-    if(num > (SamplesPerTrace-CurrentSample)) {
-        num=(SamplesPerTrace-CurrentSample);
-    }
-    traces->reset(new TracesMatrix(BATCH_SIZE,NumTraces));
+    num = min<unsigned long long>(num,SamplesPerTrace-CurrentSample);
+    traces->reset(new TracesMatrix(NumTraces,BATCH_SIZE));
     ++CurrentId;
     *id=CurrentId;
     for(cur_trace=0; cur_trace<NumTraces; cur_trace++) {
@@ -42,7 +40,7 @@ template <class T>void SamplesInput::bin1::readSamples(shared_ptr<TracesMatrix> 
     input->read((char*)(&buffer),sizeof(T)*numsamples);
 //File is big enough, checked right after open.
     for(unsigned long i = 0; i <numsamples; i++) {
-        (*traces)(i,column) = buffer[i];
+        (*traces)(column,i) = buffer[i];
     }
 }
 void BufferToBitset(char *buffer,std::bitset<DATA_SIZE_BIT> &bitset) {
