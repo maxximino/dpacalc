@@ -11,9 +11,7 @@ using namespace std;
 class DPA {
 
 public:
-    DPA() {
-
-    }
+    
     int main(int argc,char**argv) {
         TCLAP::CmdLine cmd("DPA calc", ' ', VERSION);
         TCLAP::ValueArg<std::string> nameArg("f","filename","Input file name",true,"","string");
@@ -79,6 +77,10 @@ public:
         stat->generate(myblock,traces,num);
 
     }
+    static DPA& instance(){
+	static DPA theInstance;
+       return theInstance;    
+    }
 protected:
     shared_ptr<DataMatrix> data;
     shared_ptr<IntermediateValueMatrix> intval;
@@ -90,11 +92,12 @@ protected:
     shared_ptr<KeyGenerators::KEYGENCLASS> keygen;
     shared_ptr<GenerateIntermediateValues::base> interm;
     shared_ptr<GeneratePowerModel::base> genpm;
-
+private:
+  DPA() {}
 };
 int main(int argc,char**argv)
 {
-    DPA me;
+    DPA me = DPA::instance();
     return me.main(argc,argv);
 
 }
