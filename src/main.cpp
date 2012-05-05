@@ -67,7 +67,7 @@ public:
         for(unsigned long i = 0; i<numbatches; i++) { //most stupid sequential mono-core executor
             doRun();
         }
-        //cout << "Done. Result:" <<endl << *sm <<endl;
+        cout << "Done. Result:" <<endl << *sm <<endl;
         return 0;
     };
     void doRun() { //BBQ-style. This method can be started multiple times in different threads. Elaborates BATCH_SIZE time samples, for each possible key value.

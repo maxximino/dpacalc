@@ -13,7 +13,7 @@ public:
     pearson(shared_ptr<PowerModelMatrix> &_pm);
 protected:
     Eigen::Matrix<TraceValueType,Eigen::Dynamic,KEYNUM> pmexpect;
-    Eigen::Matrix<TraceValueType,Eigen::Dynamic,KEYNUM> pmexpect_squared;
+    Eigen::Matrix<TraceValueType,1,KEYNUM> pmexpect_bykey;
 };
 }
 

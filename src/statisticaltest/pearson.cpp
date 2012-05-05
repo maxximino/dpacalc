@@ -14,7 +14,9 @@ Statistic::pearson::pearson(shared_ptr< PowerModelMatrix >& _pm): base(_pm)
     {
         pmexpect.col(d) = pm->col(d).array() - pmaverage(0,d);
     }
-    pmexpect_squared = pmexpect.array().square();
+    for (long keyh = 0; keyh < KEYNUM; keyh++ ){
+    pmexpect_bykey(0,keyh) = pmexpect.col(keyh).squaredNorm();
+    }
 
 }
 void Statistic::pearson::generate(shared_ptr< Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> > stat, shared_ptr< TracesMatrix >& traces, long unsigned int numvalid)
@@ -29,20 +31,16 @@ void Statistic::pearson::generate(shared_ptr< Eigen::Block<StatisticIndexMatrix,
     */
     assert(numvalid <= BATCH_SIZE);
     TraceValueType tavg;
-    StatisticValueType dividendo;
-    StatisticValueType divisore;
+   // StatisticValueType dividendo;
+   // StatisticValueType divisore;
+    shared_ptr< Matrix<StatisticValueType,1,KEYNUM> > dividendi = shared_ptr<Matrix<StatisticValueType,1,KEYNUM> >(new Matrix<StatisticValueType,1,KEYNUM> );
+    shared_ptr< Matrix<StatisticValueType,1,KEYNUM> > divisori = shared_ptr<Matrix<StatisticValueType,1,KEYNUM> >(new Matrix<StatisticValueType,1,KEYNUM> );
     for(unsigned long long time=0; time < numvalid; time++) {
-        tavg = traces->col (time).array().sum() / traces->col(time).array().count();
-        for(unsigned long long keyh=0; keyh < KEYNUM; keyh++) {
-//	    cout << "Computing Perarson coeff between " << traces->col(time).array() << " and " << pm->col(keyh).array() <<endl;
-	    dividendo = (traces->col(time).array() - tavg).cwiseProduct(pmexpect.col(keyh).array()).sum();
-            divisore=(traces->col(time).array() - tavg).square().sum() * pmexpect_squared.col(keyh).array().sum(); //here it can be optimized further. The second factor doesn't depend on time, so it can be precomputed in constructor.
-	    divisore=sqrt(divisore);
-            (*stat)(time,keyh)=dividendo/divisore;
-//	    cout << " - Result: " << (*stat)(time,keyh) << endl;
-
-
-        }
+	tavg = traces->col(time).array().sum() / traces->col(time).array().count();
+       (*divisori) = ((traces->col(time).array() - tavg).matrix().squaredNorm() * pmexpect_bykey).array().sqrt();
+       (*dividendi).noalias() = (traces->col(time).array() - tavg).matrix().transpose() * pmexpect;
+       stat->row(time) = (*dividendi).array() / (*divisori).array();
+      
     }
 }
 
