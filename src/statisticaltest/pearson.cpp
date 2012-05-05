@@ -1,64 +1,48 @@
 #include "dpacalc.h"
 #include "pearson.hpp"
-
-Statistic::pearson::pearson ( shared_ptr< PowerModelMatrix >& _pm,unsigned long long nt ) :base ( _pm,nt ),batches()
+Statistic::pearson::pearson(shared_ptr< PowerModelMatrix >& _pm): base(_pm)
 {
+    Eigen::Matrix<TraceValueType,1,KEYNUM> pmaverage = Matrix<TraceValueType,1,KEYNUM> ();
     pm=shared_ptr<PowerModelMatrix> ( _pm );
-    pmaverage = Matrix<TraceValueType,Dynamic,1> ( pm->rows(),1 );
-    for ( long d = 0; d < pm->rows(); d++ )
+    pmexpect = Matrix<TraceValueType,Dynamic,KEYNUM> ( pm->rows(),KEYNUM );
+    for ( long d = 0; d < KEYNUM; d++ )
     {
-        //sum overflow? si può fare approccio tipo ricerca binaria, ma efficienza cala.
-        pmaverage ( d,0 ) = pm->row ( d ).array().sum() / pm->row ( d ).array().count();
+        //Rischio di sum overflow? si può fare approccio tipo ricerca binaria, ma efficienza cala.
+        pmaverage ( 0,d ) = pm->col(d).array().sum() / pm->col(d).array().count();
     }
-    cout << "Power Average: " <<endl <<pmaverage <<endl;
-}
-
-void Statistic::pearson::parallel_pass3 ( unsigned long long batchid )
-{
-    cout << "Passo 3 batch " << batchid <<endl;
-}
-void Statistic::pearson::sequential_printCSV ( unsigned long long batchid, ostream &out )
-{
-
-}
-void Statistic::pearson::single_pass2()
-{
-    traceaverage = Matrix<TraceValueType,Dynamic,1> ( NumTraces,1 );
-
-    for ( unsigned long long t = 0; t < NumTraces; t++ )
+    for (long d = 0; d < pm->cols(); d++ )
     {
-        //sum overflow? si può fare approccio tipo ricerca binaria, ma efficienza cala.
-        traceaverage ( t,0 ) = 0;
-        TraceValueType coeffsum=0;
-        for ( std::map<unsigned long long,shared_ptr<BatchInfo> >::iterator it = batches.begin(); it != batches.end(); ++it )
-        {
-            TraceValueType coeff = 1;
-            if(it->second->numvalid != BATCH_SIZE) { //Only for the last one.
-                coeff = (TraceValueType)it->second->numvalid/(TraceValueType)BATCH_SIZE;
-            }
-            cout << "old value " << traceaverage (t,0) << " coeff " << coeff << " added value " << it->second->blktraceaverage(t,0) << endl;
-            traceaverage (t,0) += it->second->blktraceaverage(t,0) * coeff;
-            cout << "new value " << traceaverage (t,0)  << endl;
-            coeffsum +=coeff;
+        pmexpect.col(d) = pm->col(d).array() - pmaverage(0,d);
+    }
+    pmexpect_squared = pmexpect.array().square();
+
+}
+void Statistic::pearson::generate(shared_ptr< Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> > stat, shared_ptr< TracesMatrix >& traces, long unsigned int numvalid)
+{
+    /*PSEUDOCODE:
+     per ogni istante di tempo:
+     Calcolarsi medie avg(t(j))
+     Per ogni tempo e ipotesi di chiave:
+    stat(j,l) = dividendo/divisore
+    dividendo = sum(i){t(i,j)-mediat(j))*pmexpect(i,l)}
+    divisore = sqrt(sum(i)^2{t(i,j)-*mediat(j)} * sum(i){pmexpect_squared(i,l)} )
+    */
+    assert(numvalid <= BATCH_SIZE);
+    TraceValueType tavg;
+    StatisticValueType dividendo;
+    StatisticValueType divisore;
+    for(unsigned long long time=0; time < numvalid; time++) {
+        tavg = traces->col (time).array().sum() / traces->col(time).array().count();
+        for(unsigned long long keyh=0; keyh < KEYNUM; keyh++) {
+//	    cout << "Computing Perarson coeff between " << traces->col(time).array() << " and " << pm->col(keyh).array() <<endl;
+	    dividendo = (traces->col(time).array() - tavg).cwiseProduct(pmexpect.col(keyh).array()).sum();
+            divisore=(traces->col(time).array() - tavg).square().sum() * pmexpect_squared.col(keyh).array().sum(); //here it can be optimized further. The second factor doesn't depend on time, so it can be precomputed in constructor.
+	    divisore=sqrt(divisore);
+            (*stat)(time,keyh)=dividendo/divisore;
+//	    cout << " - Result: " << (*stat)(time,keyh) << endl;
+
+
         }
-        cout << "Trace sum:" <<traceaverage (t,0) << " size " << batches.size() << endl;
-        traceaverage (t,0) /= coeffsum;
     }
-    cout << "Traces average: " <<endl <<traceaverage <<endl;
-
-}
-void Statistic::pearson::parallel_pass1 ( unsigned long long batchid,shared_ptr<TracesMatrix> &traces,unsigned long numvalid )
-{
-    shared_ptr<BatchInfo> bi = shared_ptr<BatchInfo> ( new BatchInfo() );
-    bi->numvalid=numvalid;
-    bi->traces=shared_ptr<TracesMatrix> ( traces );
-    pmaverage = Matrix<TraceValueType,Dynamic,1> ( traces->rows(),1 );
-    for ( long d = 0; d < pm->rows(); d++ )
-    {
-        //sum overflow? si può fare approccio tipo ricerca binaria, ma efficienza cala.
-        bi->blktraceaverage ( d,0 ) = traces->row ( d ).array().leftCols ( numvalid ).sum() / numvalid;
-    }
-    cout << "Chunk of traces average: " <<endl <<bi->blktraceaverage <<endl;
-    batches.insert(pair <unsigned long long,shared_ptr<BatchInfo> >(batchid,shared_ptr<BatchInfo>(bi)));
 }
 

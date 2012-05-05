@@ -24,6 +24,26 @@ menu "Basic settings"
 	    bool "Double"
   endchoice
 endmenu
+menu "Compilation options"
+  choice
+	prompt "Build type"
+    config BUILD_DEBUG
+	    bool "Debug"
+    config BUILD_RELEASE
+	    bool "Release"
+  endchoice
+
+config DEBUG_OPTIONS
+	  string "Debug options"
+	  default "-O0 -g"
+	  depends on BUILD_DEBUG
+	  
+config OPTIMIZATION_OPTIONS
+	  string "Optimization options"
+	  default "-O2 -march=native"
+	  depends on BUILD_RELEASE
+
+endmenu
 menu "Class choices"  
   
  

@@ -10,6 +10,8 @@ long long unsigned int SamplesInput::bin1::read(long long unsigned int num, long
         return 0;
     }
     num = min<unsigned long long>(num,SamplesPerTrace-CurrentSample);
+    cout << "I'm going to allocate a " << NumTraces << " * " << BATCH_SIZE << " * " << sizeof(TraceValueType) << " = " << (NumTraces*BATCH_SIZE*sizeof(TraceValueType)/1024) << " kb matrix"<<endl;
+   
     traces->reset(new TracesMatrix(NumTraces,BATCH_SIZE));
     ++CurrentId;
     *id=CurrentId;
@@ -102,6 +104,7 @@ SamplesInput::bin1::bin1(shared_ptr<istream> _input):
         exit(1);
     }
     TotalFileSize=sizeof(header) + header.numtraces*(header.knowndatalength+samplesize*header.numsamples_per_trace);
+  
     input->seekg(0,ios::end);
     if(input->tellg()!=TotalFileSize) {
         cerr << "File size should be " << TotalFileSize << " but it is " << input->tellg() << endl <<" Header size: " << sizeof(header) << endl << header.numtraces <<" traces, single trace size: " << (int)header.knowndatalength << " (known data) + " << header.numsamples_per_trace << "*" << samplesize << " bytes." <<endl;

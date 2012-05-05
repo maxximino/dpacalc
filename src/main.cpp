@@ -1,4 +1,5 @@
 #include "dpacalc.h"
+#include "statisticaltest/base.hpp"
 #include <iostream>
 #include <fstream>
 #include <tclap/CmdLine.h>
@@ -10,7 +11,7 @@ using namespace std;
 class DPA {
 
 public:
-    DPA():nextbatch_mutex() {
+    DPA() {
 
     }
     int main(int argc,char**argv) {
@@ -40,65 +41,56 @@ public:
         numbatches= (input->SamplesPerTrace/BATCH_SIZE) + (((input->SamplesPerTrace%BATCH_SIZE)==0)?0:1);
         cout << "Reading known data..." <<endl;
         data = input->readData();
-        cout << "Dati delle tracce:";
-        for(unsigned int i = 0; i < data->capacity(); i++) {
-            cout << (*data)[i] << endl;
-        }
+      //  cout << "Dati delle tracce:";
+      //  for(unsigned int i = 0; i < data->capacity(); i++) {
+      //      cout << (*data)[i] << endl;
+      //  }
         cout << "Done. Calculating intermediate values.....[single threaded]" <<endl;
 
         intval.reset( new IntermediateValueMatrix(input->NumTraces,KEYNUM));
         interm->generate(data,intval);
         data.reset(); // I don't need that data anymore.
-        cout << "Valori intermedi: " <<  endl<<*intval <<endl;
+       // cout << "Valori intermedi: " <<  endl<<*intval <<endl;
         cout << "Done. Calculating power model.....[single threaded]" <<endl;
 
         pm.reset(new PowerModelMatrix(input->NumTraces,KEYNUM));
         genpm->generate(intval,pm);
         intval.reset(); // I don't need that data anymore, let's free some memory!
-        cout << "modello del consumo di potenza: " <<  endl<<*pm <<endl;
+       // cout << "modello del consumo di potenza: " <<  endl<<*pm <<endl;
+        cout << "Done. Initializing statistic test [single threaded]:" <<endl;
+        // StatisticIndexMatrix size should be a multiple of BATCH_SIZE
+        unsigned long sz = input->SamplesPerTrace;
+        if(sz % BATCH_SIZE > 0) sz += (BATCH_SIZE - (sz % BATCH_SIZE)) ;
+        sm.reset(new StatisticIndexMatrix(sz,KEYNUM));
+        stat = shared_ptr<Statistic::base>(new Statistic::STATISTICCLASS(pm));
         cout << "Done. Starting statistic test pass 1 [multithreaded]" <<endl;
-        stat = shared_ptr<Statistic::base>(new Statistic::STATISTICCLASS(pm,input->NumTraces));
         for(unsigned long i = 0; i<numbatches; i++) { //most stupid sequential mono-core executor
             doRun();
         }
-        stat->single_pass2();
-        nextbatch=0;
-        for(unsigned long i = 0; i<numbatches; i++) { //most stupid sequential mono-core executor
-            doRun2();
-        }
-
+        //cout << "Done. Result:" <<endl << *sm <<endl;
         return 0;
     };
-    void doRun2() {
-        nextbatch_mutex.lock();
-        unsigned long myid = nextbatch;
-        nextbatch++;
-        nextbatch_mutex.unlock();
-        if(nextbatch > numbatches) {
-            return;
-        }
-        stat->parallel_pass3(myid);
-    }
     void doRun() { //BBQ-style. This method can be started multiple times in different threads. Elaborates BATCH_SIZE time samples, for each possible key value.
         unsigned long long myid;
         shared_ptr<TracesMatrix> traces;
         int num = input->read(BATCH_SIZE,&myid,&traces);
-        cout << "Ho " << num << " sample validi. Tracce:" <<endl << *traces << endl;
-        stat->parallel_pass1(myid,traces,num);
+        //cout << "Ho " << num << " sample validi. Tracce:" <<endl << *traces << endl;
+        shared_ptr< Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> > myblock = shared_ptr<Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> >(new Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> (*sm,BATCH_SIZE*myid,0));
+        stat->generate(myblock,traces,num);
 
     }
 protected:
     shared_ptr<DataMatrix> data;
     shared_ptr<IntermediateValueMatrix> intval;
     shared_ptr<PowerModelMatrix> pm;
+    shared_ptr<StatisticIndexMatrix> sm;
     unsigned long numbatches;
     shared_ptr<SamplesInput::base> input;
     shared_ptr<Statistic::base> stat;
     shared_ptr<KeyGenerators::KEYGENCLASS> keygen;
     shared_ptr<GenerateIntermediateValues::base> interm;
     shared_ptr<GeneratePowerModel::base> genpm;
-    unsigned long nextbatch ;
-    std::mutex nextbatch_mutex;
+
 };
 int main(int argc,char**argv)
 {

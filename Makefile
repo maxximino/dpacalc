@@ -5,7 +5,7 @@ KCONFIG_PATH=./kconfig/kconfig
 KCONFIG_CONFIG=dpacalc-config
 KCONFIG_FILENAME=Kconfig
 KCONFIG_OUTPUT_CMAKE=dpacalc-config.cmake
-
+NUMCPUS=$(shell grep -c '^processor' /proc/cpuinfo)
 
 $(KCONFIG_PATH)/kconfig.inc.mk:
 	git submodule init
@@ -26,5 +26,5 @@ out/Makefile:
 	cd out && cmake ../src
 
 dpacalc: dpaconfig out/Makefile
-	cd out && $(MAKE)
+	cd out && $(MAKE) -j$(NUMCPUS)
 	
