@@ -103,7 +103,7 @@ SamplesInput::bin1::bin1(shared_ptr<istream> _input):
         cerr << "Sample data type should be b,c,f, or d. " << endl;
         exit(1);
     }
-    TotalFileSize=sizeof(header) + header.numtraces*(header.knowndatalength+samplesize*header.numsamples_per_trace);
+    TotalFileSize=(long long)sizeof(header) + (long long)header.numtraces*((long long)header.knowndatalength+samplesize*(long long)header.numsamples_per_trace);
   
     input->seekg(0,ios::end);
     if(input->tellg()!=TotalFileSize) {
