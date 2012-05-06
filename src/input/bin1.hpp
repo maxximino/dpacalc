@@ -25,9 +25,23 @@ struct queueelement{
 class bin1 : public base {
 public:
     virtual unsigned long long read(unsigned long long *id, shared_ptr<TracesMatrix> *traces);
-    bin1(int _input);
+        bin1(TCLAP::CmdLine &cmd):
+        base(cmd),
+        nameArg("f","filename","Input file name",true,"","path"),
+        mlockArg("m","mlock","mlock entire input file in ram? Use only if you know what you're doing.",false,false,"0/1"),
+        queuemutex(),readytraces()
+	{
+	    cmd.add(nameArg);
+	    cmd.add(mlockArg);
+	};
+    virtual void init();
+    ~bin1();
     shared_ptr<DataMatrix> readData();
 protected:
+    TCLAP::ValueArg<std::string> nameArg;
+    TCLAP::ValueArg<bool> mlockArg;
+    std::mutex input_mutex;
+    int inputfd;
     template <class T> void readSamples(shared_ptr<TracesMatrix> &traces,unsigned long curtrace,unsigned long startingsample, unsigned long numsamples);
     char sampletype;
     int samplesize;
@@ -35,6 +49,7 @@ protected:
     shared_ptr<DataMatrix> data;
     void populateQueue();
     mutex queuemutex;
+     long long RealFileSize;
     queue<queueelement> readytraces;
     unsigned long long getSampleOffset(unsigned long long trace, unsigned long long samplenum) {
         //trace and samplenum are zero-based

@@ -1,9 +1,10 @@
 #include "dpacalc.h"
 #include "pearson.hpp"
-Statistic::pearson::pearson(shared_ptr< PowerModelMatrix >& _pm): base(_pm)
+
+void Statistic::pearson::init(shared_ptr< PowerModelMatrix >& _pm)
 {
+    Statistic::base::init(_pm);
     Eigen::Matrix<TraceValueType,1,KEYNUM> pmaverage = Matrix<TraceValueType,1,KEYNUM> ();
-    pm=shared_ptr<PowerModelMatrix> ( _pm );
     pmexpect = Matrix<TraceValueType,Dynamic,KEYNUM> ( pm->rows(),KEYNUM );
     for ( long d = 0; d < KEYNUM; d++ )
     {
@@ -19,6 +20,7 @@ Statistic::pearson::pearson(shared_ptr< PowerModelMatrix >& _pm): base(_pm)
     }
 
 }
+
 void Statistic::pearson::generate(shared_ptr< Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> > stat, shared_ptr< TracesMatrix >& traces, long unsigned int numvalid)
 {
     /*PSEUDOCODE:

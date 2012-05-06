@@ -10,7 +10,8 @@ void ExecMethod::cxx11threads::RunAndWait(unsigned long numberoftimes)
 {
   batchmax=numberoftimes;
   batchcur=0;
-  int numCPU = sysconf( _SC_NPROCESSORS_ONLN );
+  int numCPU = procArg.getValue();
+  if(numCPU==0){numCPU= sysconf( _SC_NPROCESSORS_ONLN );}
   vector<thread> thrs;
   thrs.push_back(thread(prefetchthread));
   for(int i = 0; i<numCPU;i++){

@@ -2,7 +2,7 @@
 #include <Eigen/Dense>
 #include <bitset>
 #include <memory>
-
+#include <tclap/CmdLine.h>
 #include "config.h"
 
 

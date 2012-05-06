@@ -3,6 +3,10 @@
 #include <thread>
 #include <sys/mman.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 //Here we can implement some sort of disk prefetching.
 long long unsigned int SamplesInput::bin1::read(long long unsigned int* id, shared_ptr< TracesMatrix >* traces)
 {
@@ -24,6 +28,69 @@ long long unsigned int SamplesInput::bin1::read(long long unsigned int* id, shar
     return qe.size;
 
 }
+void SamplesInput::bin1::init()
+{
+    struct fileheaders header;
+    long long TotalFileSize;
+    SamplesInput::base::init();
+        inputfd = open(nameArg.getValue().c_str(),O_RDONLY );
+        if(inputfd==-1) {
+            cerr << "Cannot open "<< nameArg.getValue() << endl;
+            exit(1);
+        }
+   
+    if(::read(inputfd,(void*)&header,sizeof(header))!=sizeof(header)) {
+        cerr << "Invalid header size"<<endl;
+        exit(1);
+    }
+    SamplesPerTrace=header.numsamples_per_trace;
+    NumTraces=header.numtraces;
+    switch(header.datatype) {
+    case 'b':
+        samplesize=1;
+        sampletype='b';
+        break;
+    case 'c':
+        samplesize=2;
+        sampletype='c';
+        break;
+    case 'f':
+        samplesize=4;
+        sampletype='f';
+        break;
+    case 'd':
+        samplesize=8;
+        sampletype='d';
+        break;
+    default:
+        cerr << "Sample data type should be b,c,f, or d. " << endl;
+        exit(1);
+    }
+    TotalFileSize=(long long)sizeof(header) + (long long)header.numtraces*((long long)header.knowndatalength+samplesize*(long long)header.numsamples_per_trace);
+
+    RealFileSize= lseek(inputfd,0,SEEK_END);
+    cout << "File size is " << RealFileSize << endl <<" Header size: " << sizeof(header) << endl << header.numtraces <<" traces, single trace size: " << (int)header.knowndatalength << " (known data) + " << header.numsamples_per_trace << "*" << samplesize << " bytes." <<endl;
+    if(RealFileSize!=TotalFileSize) {
+        cerr << "File size should be " << TotalFileSize << " but it is " << RealFileSize << endl <<" Header size: " << sizeof(header) << endl << header.numtraces <<" traces, single trace size: " << (int)header.knowndatalength << " (known data) + " << header.numsamples_per_trace << "*" << samplesize << " bytes." <<endl;
+        exit(2);
+    }
+    if(header.knowndatalength != DATA_SIZE_BYTE) {
+        cerr << "The length of each known data should be " << DATA_SIZE_BYTE << " but it is " << (int)header.knowndatalength << ". Change data file or recompile this program with appropriate options." <<endl;
+        exit(2);
+    }
+    fileoffset = mmap(NULL,RealFileSize,PROT_READ,MAP_SHARED,inputfd,0);
+    if(fileoffset == MAP_FAILED) {
+        cerr << "Cannot memory map input file. Cannot continue"<<endl;
+        exit(3);
+    }
+    if(mlockArg.getValue()){
+    cout << "mlock-ing"<<endl;
+     mlock(fileoffset,RealFileSize);
+     cout << "mlock-ed"<<endl;
+    }
+    readData();        
+}
+
 void SamplesInput::bin1::populateQueue()
 {
     unsigned long long cur_trace;
@@ -111,60 +178,12 @@ std::shared_ptr< DataMatrix > SamplesInput::bin1::readData()
     return shared_ptr<DataMatrix>(data);
 
 }
-SamplesInput::bin1::bin1(int _input):
-    base(_input), queuemutex(),readytraces()
+SamplesInput::bin1::~bin1()
 {
-    struct fileheaders header;
-    long long TotalFileSize;
-    long long RealFileSize;
-    if(::read(input,(void*)&header,sizeof(header))!=sizeof(header)) {
-        cerr << "Invalid header size"<<endl;
-        exit(1);
+  if(mlockArg.getValue()){
+    munlock(fileoffset,RealFileSize);
     }
-    cout << "char:" << header.datatype <<endl;
-    SamplesPerTrace=header.numsamples_per_trace;
-    NumTraces=header.numtraces;
-    switch(header.datatype) {
-    case 'b':
-        samplesize=1;
-        sampletype='b';
-        break;
-    case 'c':
-        samplesize=2;
-        sampletype='c';
-        break;
-    case 'f':
-        samplesize=4;
-        sampletype='f';
-        break;
-    case 'd':
-        samplesize=8;
-        sampletype='d';
-        break;
-    default:
-        cerr << "Sample data type should be b,c,f, or d. " << endl;
-        exit(1);
-    }
-    TotalFileSize=(long long)sizeof(header) + (long long)header.numtraces*((long long)header.knowndatalength+samplesize*(long long)header.numsamples_per_trace);
-
-    RealFileSize= lseek(input,0,SEEK_END);
-    cout << "File size is " << RealFileSize << endl <<" Header size: " << sizeof(header) << endl << header.numtraces <<" traces, single trace size: " << (int)header.knowndatalength << " (known data) + " << header.numsamples_per_trace << "*" << samplesize << " bytes." <<endl;
-    if(RealFileSize!=TotalFileSize) {
-        cerr << "File size should be " << TotalFileSize << " but it is " << RealFileSize << endl <<" Header size: " << sizeof(header) << endl << header.numtraces <<" traces, single trace size: " << (int)header.knowndatalength << " (known data) + " << header.numsamples_per_trace << "*" << samplesize << " bytes." <<endl;
-        exit(2);
-    }
-    if(header.knowndatalength != DATA_SIZE_BYTE) {
-        cerr << "The length of each known data should be " << DATA_SIZE_BYTE << " but it is " << (int)header.knowndatalength << ". Change data file or recompile this program with appropriate options." <<endl;
-        exit(2);
-    }
-    fileoffset = mmap(NULL,RealFileSize,PROT_READ,MAP_SHARED,input,0);
-    if(fileoffset == MAP_FAILED) {
-        cerr << "Cannot memory map input file. Cannot continue"<<endl;
-        exit(3);
-    }
-    /* cout << "mlock-ing"<<endl;
-     mlock(fileoffset,RealFileSize);
-     cout << "mlock-ed"<<endl; */
-    readData();
+munmap(fileoffset,RealFileSize);
+close(inputfd);
 }
 
