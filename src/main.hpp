@@ -18,7 +18,6 @@ protected:
     shared_ptr<DataMatrix> data;
     shared_ptr<IntermediateValueMatrix> intval;
     shared_ptr<PowerModelMatrix> pm;
-    shared_ptr<StatisticIndexMatrix> sm;
     unsigned long numbatches;
     shared_ptr<SamplesInput::base> input;
     shared_ptr<Statistic::base> stat;

@@ -12,10 +12,11 @@ void DPA::doRun() //BBQ-style. This method can be started multiple times in diff
 {
     unsigned long long myid;
     shared_ptr<TracesMatrix> traces;
+    shared_ptr<StatisticIndexMatrix> sm;
     int num = input->read(&myid,&traces);
     //cout << "Ho " << num << " sample validi. Tracce:" <<endl << *traces << endl;
-    shared_ptr< Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> > myblock = shared_ptr<Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> >(new Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> (*sm,BATCH_SIZE*myid,0));
-    stat->generate(myblock,traces,num);
+    sm.reset(new StatisticIndexMatrix(num,KEYNUM));
+    stat->generate(sm,traces,num);
 }
 long timevaldiff(struct timeval *starttime, struct timeval *finishtime)
 {
@@ -75,7 +76,6 @@ int DPA::main(int argc, char** argv)
     // StatisticIndexMatrix size should be a multiple of BATCH_SIZE
     unsigned long sz = input->SamplesPerTrace;
     if(sz % BATCH_SIZE > 0) sz += (BATCH_SIZE - (sz % BATCH_SIZE)) ;
-    sm.reset(new StatisticIndexMatrix(sz,KEYNUM));
     stat->init(pm);
     cout << "Done. Starting statistic test pass 1 [multithreaded]" <<endl;
     exec->RunAndWait(numbatches);

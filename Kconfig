@@ -70,5 +70,9 @@ config CLASS_STATISTIC
 config CLASS_EXEC
 	  string "Name of the class that manages threads"
 	  default "seq_monocore"
+
+config CLASS_OUTPUT
+	  string "Name of the class that writes output data"
+	  default "gnuplot"
  
 endmenu

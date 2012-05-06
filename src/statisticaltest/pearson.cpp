@@ -21,7 +21,7 @@ void Statistic::pearson::init(shared_ptr< PowerModelMatrix >& _pm)
 
 }
 
-void Statistic::pearson::generate(shared_ptr< Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> > stat, shared_ptr< TracesMatrix >& traces, long unsigned int numvalid)
+void Statistic::pearson::generate(shared_ptr<StatisticIndexMatrix> &stat, shared_ptr< TracesMatrix >& traces, long unsigned int numvalid)
 {
     /*PSEUDOCODE:
      per ogni istante di tempo:
