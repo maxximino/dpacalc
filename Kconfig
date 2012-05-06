@@ -66,5 +66,9 @@ config CLASS_POWERMODEL
 config CLASS_STATISTIC
 	  string "Name of the class that computes statistic tests"
 	  default "pearson"
-  
+
+config CLASS_EXEC
+	  string "Name of the class that manages threads"
+	  default "seq_monocore"
+ 
 endmenu

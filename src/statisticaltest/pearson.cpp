@@ -33,8 +33,8 @@ void Statistic::pearson::generate(shared_ptr< Eigen::Block<StatisticIndexMatrix,
     TraceValueType tavg;
    // StatisticValueType dividendo;
    // StatisticValueType divisore;
-    shared_ptr< Matrix<StatisticValueType,1,KEYNUM> > dividendi = shared_ptr<Matrix<StatisticValueType,1,KEYNUM> >(new Matrix<StatisticValueType,1,KEYNUM> );
-    shared_ptr< Matrix<StatisticValueType,1,KEYNUM> > divisori = shared_ptr<Matrix<StatisticValueType,1,KEYNUM> >(new Matrix<StatisticValueType,1,KEYNUM> );
+    auto dividendi = shared_ptr<Matrix<StatisticValueType,1,KEYNUM> >(new Matrix<StatisticValueType,1,KEYNUM>() );
+    auto divisori = shared_ptr<Matrix<StatisticValueType,1,KEYNUM> >(new Matrix<StatisticValueType,1,KEYNUM>() );
     for(unsigned long long time=0; time < numvalid; time++) {
 	tavg = traces->col(time).array().sum() / traces->col(time).array().count();
        (*divisori) = ((traces->col(time).array() - tavg).matrix().squaredNorm() * pmexpect_bykey).array().sqrt();

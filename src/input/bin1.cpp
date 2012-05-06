@@ -10,7 +10,7 @@ long long unsigned int SamplesInput::bin1::read(long long unsigned int num, long
         return 0;
     }
     num = min<unsigned long long>(num,SamplesPerTrace-CurrentSample);
-    cout << "I'm going to allocate a " << NumTraces << " * " << BATCH_SIZE << " * " << sizeof(TraceValueType) << " = " << (NumTraces*BATCH_SIZE*sizeof(TraceValueType)/1024) << " kb matrix"<<endl;
+  //  cout << "I'm going to allocate a " << NumTraces << " * " << BATCH_SIZE << " * " << sizeof(TraceValueType) << " = " << (NumTraces*BATCH_SIZE*sizeof(TraceValueType)/1024) << " kb matrix"<<endl;
    
     traces->reset(new TracesMatrix(NumTraces,BATCH_SIZE));
     ++CurrentId;
