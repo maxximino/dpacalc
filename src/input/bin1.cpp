@@ -1,54 +1,88 @@
 #include "bin1.hpp"
 #include <algorithm>
+#include <thread>
 #include <sys/mman.h>
 #include <unistd.h>
 //Here we can implement some sort of disk prefetching.
-long long unsigned int SamplesInput::bin1::read(long long unsigned int num, long long unsigned int* id, shared_ptr< TracesMatrix >* traces)
+long long unsigned int SamplesInput::bin1::read(long long unsigned int* id, shared_ptr< TracesMatrix >* traces)
+{
+    queueelement qe;
+    while(qe.size == -1) {
+        queuemutex.lock();
+        if(!readytraces.empty()) {
+            qe = readytraces.front();
+            readytraces.pop();
+            queuemutex.unlock();
+        }
+        else {
+            queuemutex.unlock();
+            populateQueue();
+        }
+    }
+    *id=qe.id;
+        (*traces)=qe.traces;
+    return qe.size;
+
+}
+void SamplesInput::bin1::populateQueue()
 {
     unsigned long long cur_trace;
     unsigned long long mysample;
+    queueelement qe = queueelement();
+    if(readytraces.size() > 30){ return;}
     input_mutex.lock();
     if(CurrentSample >= SamplesPerTrace) {
         input_mutex.unlock();
-        return 0;
+        return ;
     }
-    num = min<unsigned long long>(num,SamplesPerTrace-CurrentSample);
+    unsigned long long num = min<unsigned long long>(BATCH_SIZE,SamplesPerTrace-CurrentSample);
     mysample = CurrentSample;
     CurrentSample+= num;
     ++CurrentId;
-    *id=CurrentId;
-    input_mutex.unlock();
-  //  cout << "I'm going to allocate a " << NumTraces << " * " << BATCH_SIZE << " * " << sizeof(TraceValueType) << " = " << (NumTraces*BATCH_SIZE*sizeof(TraceValueType)/1024) << " kb matrix"<<endl;
-    traces->reset(new TracesMatrix(NumTraces,BATCH_SIZE));
+    qe.size=num;
+    qe.id=CurrentId;
+    qe.traces = shared_ptr<TracesMatrix>(new TracesMatrix(NumTraces,BATCH_SIZE));
+
+    //  cout << "I'm going to allocate a " << NumTraces << " * " << BATCH_SIZE << " * " << sizeof(TraceValueType) << " = " << (NumTraces*BATCH_SIZE*sizeof(TraceValueType)/1024) << " kb matrix"<<endl;
     for(cur_trace=0; cur_trace<NumTraces; cur_trace++) {
-     //   input->seekg(getSampleOffset(cur_trace,CurrentSample),ios::beg);
+        //   input->seekg(getSampleOffset(cur_trace,CurrentSample),ios::beg);
         switch(sampletype) {
         case 'b':
-            readSamples<uint8_t>(*traces,cur_trace,mysample,num);
+            readSamples<uint8_t>(qe.traces,cur_trace,mysample,num);
             break;
         case 'c':
-            readSamples<uint16_t>(*traces,cur_trace,mysample,num);
+            readSamples<uint16_t>(qe.traces,cur_trace,mysample,num);
             break;
         case 'f':
-            readSamples<float>(*traces,cur_trace,mysample,num);
+            readSamples<float>(qe.traces,cur_trace,mysample,num);
             break;
         case 'd':
-            readSamples<double>(*traces,cur_trace,mysample,num);
+            readSamples<double>(qe.traces,cur_trace,mysample,num);
             break;
         }
     }
-    
-    return num;
+    queuemutex.lock();
+    readytraces.push(qe);
+    queuemutex.unlock();
+    input_mutex.unlock();
+    return ;
 }
+
+
 template <class T>void SamplesInput::bin1::readSamples(shared_ptr<TracesMatrix> &traces,unsigned long curtrace,unsigned long startingsample, unsigned long numsamples)
 {
     T* buffer;
+    //File is big enough, checked right after open.
     buffer = (T*)((char*)fileoffset + getSampleOffset(curtrace,startingsample));
- //   input->read((char*)(&buffer),sizeof(T)*numsamples);
-//File is big enough, checked right after open.
-    for(unsigned long i = 0; i <numsamples; i++) {
+//   input->read((char*)(&buffer),sizeof(T)*numsamples);
+
+    Map<const Matrix<T,1,Eigen::Dynamic> > src = Map<const Matrix<T,1,Eigen::Dynamic> >(buffer,1,numsamples);
+    // /cout << endl << "asd " << src.row(0).cast<TraceValueType>() << endl;
+
+    traces->row(curtrace).head(numsamples) = src.template cast<TraceValueType>();
+    /*for(unsigned long i = 0; i <numsamples; i++) {
         (*traces)(curtrace,i) = buffer[i];
-    }
+    }*/
 }
 void BufferToBitset(char *buffer,std::bitset<DATA_SIZE_BIT> &bitset) {
     for(unsigned long dim = 0; dim < DATA_SIZE_BYTE; dim++) {
@@ -70,7 +104,7 @@ std::shared_ptr< DataMatrix > SamplesInput::bin1::readData()
     input_mutex.lock();
     data.reset( new DataMatrix(NumTraces));
     for(unsigned long cur_trace=0; cur_trace<NumTraces; cur_trace++) {
-      buffer = (char*)fileoffset +  getDataOffset(cur_trace);
+        buffer = (char*)fileoffset +  getDataOffset(cur_trace);
         BufferToBitset(buffer,(*data)[cur_trace]);
     }
     input_mutex.unlock();
@@ -78,14 +112,14 @@ std::shared_ptr< DataMatrix > SamplesInput::bin1::readData()
 
 }
 SamplesInput::bin1::bin1(int _input):
-    base(_input)
+    base(_input), queuemutex(),readytraces()
 {
     struct fileheaders header;
     long long TotalFileSize;
     long long RealFileSize;
-    if(::read(input,(void*)&header,sizeof(header))!=sizeof(header)){
-      cerr << "Invalid header size"<<endl;
-      exit(1);
+    if(::read(input,(void*)&header,sizeof(header))!=sizeof(header)) {
+        cerr << "Invalid header size"<<endl;
+        exit(1);
     }
     cout << "char:" << header.datatype <<endl;
     SamplesPerTrace=header.numsamples_per_trace;
@@ -112,7 +146,7 @@ SamplesInput::bin1::bin1(int _input):
         exit(1);
     }
     TotalFileSize=(long long)sizeof(header) + (long long)header.numtraces*((long long)header.knowndatalength+samplesize*(long long)header.numsamples_per_trace);
-  
+
     RealFileSize= lseek(input,0,SEEK_END);
     cout << "File size is " << RealFileSize << endl <<" Header size: " << sizeof(header) << endl << header.numtraces <<" traces, single trace size: " << (int)header.knowndatalength << " (known data) + " << header.numsamples_per_trace << "*" << samplesize << " bytes." <<endl;
     if(RealFileSize!=TotalFileSize) {
@@ -124,10 +158,13 @@ SamplesInput::bin1::bin1(int _input):
         exit(2);
     }
     fileoffset = mmap(NULL,RealFileSize,PROT_READ,MAP_SHARED,input,0);
-    if(fileoffset == MAP_FAILED){
-      cerr << "Cannot memory map input file. Cannot continue"<<endl;
-      exit(3);
+    if(fileoffset == MAP_FAILED) {
+        cerr << "Cannot memory map input file. Cannot continue"<<endl;
+        exit(3);
     }
+    /* cout << "mlock-ing"<<endl;
+     mlock(fileoffset,RealFileSize);
+     cout << "mlock-ed"<<endl; */
     readData();
 }
 

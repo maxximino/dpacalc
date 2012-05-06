@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
+#include <sys/time.h>
 #define VERSION "0.01alpha"
 using namespace Eigen;
 using namespace std;
@@ -16,10 +16,22 @@ void DPA::doRun() //BBQ-style. This method can be started multiple times in diff
 {
         unsigned long long myid;
         shared_ptr<TracesMatrix> traces;
-        int num = input->read(BATCH_SIZE,&myid,&traces);
+        int num = input->read(&myid,&traces);
         //cout << "Ho " << num << " sample validi. Tracce:" <<endl << *traces << endl;
         shared_ptr< Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> > myblock = shared_ptr<Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> >(new Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> (*sm,BATCH_SIZE*myid,0));
         stat->generate(myblock,traces,num);
+}
+long timevaldiff(struct timeval *starttime, struct timeval *finishtime)
+{
+  long msec;
+  msec=(finishtime->tv_sec-starttime->tv_sec)*1000;
+  msec+=(finishtime->tv_usec-starttime->tv_usec)/1000;
+  return msec;
+}
+void DPA::prefetch(){
+  while(input->CurrentSample < input->SamplesPerTrace){
+    input->populateQueue();
+  }
 }
 int DPA::main(int argc, char** argv)
 {
@@ -41,9 +53,12 @@ int DPA::main(int argc, char** argv)
             cerr << "Cannot open "<< nameArg.getValue() << endl;
             return 1;
         }
+        timeval start,end;
         exec = shared_ptr<ExecMethod::base>(new ExecMethod::EXECCLASS());
         input = shared_ptr<SamplesInput::base>(new SamplesInput::INPUTCLASS(inputfile));
-        keygen= shared_ptr<KeyGenerators::KEYGENCLASS>(new KeyGenerators::KEYGENCLASS());
+gettimeofday(&start,NULL);
+  
+	keygen= shared_ptr<KeyGenerators::KEYGENCLASS>(new KeyGenerators::KEYGENCLASS());
         interm= shared_ptr<GenerateIntermediateValues::base>(new GenerateIntermediateValues::GENINTERMCLASS(keygen));
         genpm= shared_ptr<GeneratePowerModel::base>(new GeneratePowerModel::GENPOWERMODELCLASS());
 
@@ -74,7 +89,11 @@ int DPA::main(int argc, char** argv)
         stat = shared_ptr<Statistic::base>(new Statistic::STATISTICCLASS(pm));
         cout << "Done. Starting statistic test pass 1 [multithreaded]" <<endl;
         exec->RunAndWait(numbatches);
-       // cout << "Done. Result:" <<endl << *sm <<endl;
+gettimeofday(&end,NULL);
+	
+	printf ("Elaboration after mlock took %li milliseconds.\n", timevaldiff(&start,&end));
+  
+        //cout << "Done. Result:" <<endl << *sm <<endl;
         return 0;
 
 }

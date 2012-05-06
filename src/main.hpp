@@ -9,6 +9,7 @@ public:
     
     int main(int argc,char**argv);
     void doRun();
+    void prefetch();
     static DPA* instance(){
 	static DPA theInstance;
        return &theInstance;    

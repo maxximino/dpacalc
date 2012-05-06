@@ -6,7 +6,7 @@ INCLUDE (${CMAKE_SOURCE_DIR}/../dpacalc-config.cmake)
 
 find_package(Eigen REQUIRED)
 include_directories(${EIGEN_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR})
-set( CMAKE_CXX_FLAGS "-std=c++0x -Wall -Werror ${CONFIG_DEBUG_OPTIONS} ${CONFIG_OPTIMIZATION_OPTIONS} -lpthread") 
+set( CMAKE_CXX_FLAGS "-std=c++0x -Wall -Werror ${CONFIG_DEBUG_OPTIONS} ${CONFIG_OPTIMIZATION_OPTIONS} -lpthread ") 
 FILE(GLOB inputsources input/*.cpp)
 FILE(GLOB keygensources keygen/*.cpp)
 FILE(GLOB intermediatesources gen_intermediate/*.cpp)
