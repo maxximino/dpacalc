@@ -24,7 +24,7 @@ long long unsigned int SamplesInput::bin1::read(long long unsigned int* id, shar
         }
     }
     *id=qe.id;
-        (*traces)=qe.traces;
+    (*traces)=qe.traces;
     return qe.size;
 
 }
@@ -33,12 +33,12 @@ void SamplesInput::bin1::init()
     struct fileheaders header;
     long long TotalFileSize;
     SamplesInput::base::init();
-        inputfd = open(nameArg.getValue().c_str(),O_RDONLY );
-        if(inputfd==-1) {
-            cerr << "Cannot open "<< nameArg.getValue() << endl;
-            exit(1);
-        }
-   
+    inputfd = open(nameArg.getValue().c_str(),O_RDONLY );
+    if(inputfd==-1) {
+        cerr << "Cannot open "<< nameArg.getValue() << endl;
+        exit(1);
+    }
+
     if(::read(inputfd,(void*)&header,sizeof(header))!=sizeof(header)) {
         cerr << "Invalid header size"<<endl;
         exit(1);
@@ -83,12 +83,12 @@ void SamplesInput::bin1::init()
         cerr << "Cannot memory map input file. Cannot continue"<<endl;
         exit(3);
     }
-    if(mlockArg.getValue()){
-    cout << "mlock-ing"<<endl;
-     mlock(fileoffset,RealFileSize);
-     cout << "mlock-ed"<<endl;
+    if(mlockArg.getValue()) {
+        cout << "mlock-ing"<<endl;
+        mlock(fileoffset,RealFileSize);
+        cout << "mlock-ed"<<endl;
     }
-    readData();        
+    readData();
 }
 
 void SamplesInput::bin1::populateQueue()
@@ -96,7 +96,9 @@ void SamplesInput::bin1::populateQueue()
     unsigned long long cur_trace;
     unsigned long long mysample;
     queueelement qe = queueelement();
-    if(readytraces.size() > 30){ return;}
+    if(readytraces.size() > 30) {
+        return;
+    }
     input_mutex.lock();
     if(CurrentSample >= SamplesPerTrace) {
         input_mutex.unlock();
@@ -180,10 +182,10 @@ std::shared_ptr< DataMatrix > SamplesInput::bin1::readData()
 }
 SamplesInput::bin1::~bin1()
 {
-  if(mlockArg.getValue()){
-    munlock(fileoffset,RealFileSize);
+    if(mlockArg.getValue()) {
+        munlock(fileoffset,RealFileSize);
     }
-munmap(fileoffset,RealFileSize);
-close(inputfd);
+    munmap(fileoffset,RealFileSize);
+    close(inputfd);
 }
 

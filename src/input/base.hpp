@@ -11,16 +11,16 @@ public:
     unsigned long long SamplesPerTrace; //from metadata, dimension N of matrix T
     unsigned long long NumTraces; //dimension N of matrix T
     unsigned long long CurrentSample;  //dimension N of matrix T
-    base(TCLAP::CmdLine &cmd){};
-    virtual void init(){
-	CurrentSample=0;
+    base(TCLAP::CmdLine &cmd) {};
+    virtual void init() {
+        CurrentSample=0;
         CurrentId=-1;
-	NumTraces=0;
-	SamplesPerTrace=0;
+        NumTraces=0;
+        SamplesPerTrace=0;
     };
     virtual unsigned long long read(unsigned long long *id, shared_ptr<TracesMatrix> *traces) = 0;
     virtual shared_ptr<DataMatrix> readData() = 0;
-    virtual void populateQueue(){};
+    virtual void populateQueue() {};
 
 protected:
     shared_ptr<DataMatrix> data;

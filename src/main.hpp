@@ -6,13 +6,13 @@ using namespace std;
 
 class DPA {
 public:
-    
+
     int main(int argc,char**argv);
     void doRun();
     void prefetch();
-    static DPA* instance(){
-	static DPA theInstance;
-       return &theInstance;    
+    static DPA* instance() {
+        static DPA theInstance;
+        return &theInstance;
     }
 protected:
     shared_ptr<DataMatrix> data;
@@ -27,5 +27,5 @@ protected:
     shared_ptr<GeneratePowerModel::base> genpm;
     shared_ptr<ExecMethod::base> exec;
 private:
-  DPA() {}
+    DPA() {}
 };

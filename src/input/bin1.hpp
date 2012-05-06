@@ -16,24 +16,27 @@ struct fileheaders {
     uint8_t knowndatalength;
 };
 #pragma pack(pop)
-struct queueelement{
-  unsigned long long id;
-  long long size;
-  shared_ptr<TracesMatrix> traces;
-  queueelement(){id=0;size=-1;}
+struct queueelement {
+    unsigned long long id;
+    long long size;
+    shared_ptr<TracesMatrix> traces;
+    queueelement() {
+        id=0;
+        size=-1;
+    }
 };
 class bin1 : public base {
 public:
     virtual unsigned long long read(unsigned long long *id, shared_ptr<TracesMatrix> *traces);
-        bin1(TCLAP::CmdLine &cmd):
+    bin1(TCLAP::CmdLine &cmd):
         base(cmd),
         nameArg("f","filename","Input file name",true,"","path"),
         mlockArg("m","mlock","mlock entire input file in ram? Use only if you know what you're doing.",false,false,"0/1"),
         queuemutex(),readytraces()
-	{
-	    cmd.add(nameArg);
-	    cmd.add(mlockArg);
-	};
+    {
+        cmd.add(nameArg);
+        cmd.add(mlockArg);
+    };
     virtual void init();
     ~bin1();
     shared_ptr<DataMatrix> readData();
@@ -49,7 +52,7 @@ protected:
     shared_ptr<DataMatrix> data;
     void populateQueue();
     mutex queuemutex;
-     long long RealFileSize;
+    long long RealFileSize;
     queue<queueelement> readytraces;
     unsigned long long getSampleOffset(unsigned long long trace, unsigned long long samplenum) {
         //trace and samplenum are zero-based

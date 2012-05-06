@@ -6,7 +6,7 @@ namespace Statistic {
 class base {
 public:
     virtual void generate(shared_ptr<Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> > stat,shared_ptr<TracesMatrix> &traces,unsigned long numvalid)=0;
-    base(TCLAP::CmdLine &cmd){};
+    base(TCLAP::CmdLine &cmd) {};
     virtual void init(shared_ptr<PowerModelMatrix> &_pm) {
         pm=shared_ptr<PowerModelMatrix>(_pm);
     }

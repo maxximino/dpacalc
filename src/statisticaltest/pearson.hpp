@@ -10,7 +10,7 @@ namespace Statistic {
 class pearson : public base {
 public:
     virtual void generate(shared_ptr<Eigen::Block<StatisticIndexMatrix,BATCH_SIZE,KEYNUM,1,1> > stat,shared_ptr<TracesMatrix> &traces,unsigned long numvalid);
-    pearson(TCLAP::CmdLine& cmd): base(cmd){};
+    pearson(TCLAP::CmdLine& cmd): base(cmd) {};
     virtual void init(shared_ptr<PowerModelMatrix> &_pm);
 protected:
     Eigen::Matrix<TraceValueType,Eigen::Dynamic,KEYNUM> pmexpect;
