@@ -18,12 +18,13 @@ struct fileheaders {
 class bin1 : public base {
 public:
     virtual unsigned long long read(unsigned long long num,unsigned long long *id, shared_ptr<TracesMatrix> *traces);
-    bin1(shared_ptr<istream> _input);
+    bin1(int _input);
     shared_ptr<DataMatrix> readData();
 protected:
-    template <class T> void readSamples(shared_ptr<TracesMatrix> &traces,unsigned long column, unsigned long numsamples);
+    template <class T> void readSamples(shared_ptr<TracesMatrix> &traces,unsigned long curtrace,unsigned long startingsample, unsigned long numsamples);
     char sampletype;
     int samplesize;
+    void* fileoffset;
     shared_ptr<DataMatrix> data;
 
     unsigned long long getSampleOffset(unsigned long long trace, unsigned long long samplenum) {

@@ -11,9 +11,9 @@ public:
     unsigned long long SamplesPerTrace; //from metadata, dimension N of matrix T
     unsigned long long NumTraces; //dimension N of matrix T
     unsigned long long CurrentSample;  //dimension N of matrix T
-    base(shared_ptr<istream> _input) {
-        assert(_input.get() != NULL);
-        input=shared_ptr<istream>(_input);
+    base(int _input) {
+        assert(_input != -1);
+        input=_input;
         CurrentSample=0;
         CurrentId=-1;
     }
@@ -22,7 +22,7 @@ public:
     virtual shared_ptr<DataMatrix> readData() = 0;
 
 protected:
-    shared_ptr<istream> input;
+    int input;
     shared_ptr<DataMatrix> data;
     unsigned long long CurrentId;
     std::mutex input_mutex;

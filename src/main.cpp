@@ -4,6 +4,10 @@
 #include <fstream>
 #include <tclap/CmdLine.h>
 #include "main.hpp"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #define VERSION "0.01alpha"
 using namespace Eigen;
 using namespace std;
@@ -32,8 +36,8 @@ int DPA::main(int argc, char** argv)
             return 1;
         }
         // Get the value parsed by each arg.
-        shared_ptr<ifstream> inputfile(new ifstream(nameArg.getValue()));
-        if(!(*inputfile)) {
+        int inputfile = open(nameArg.getValue().c_str(),O_RDONLY );
+        if(inputfile==-1) {
             cerr << "Cannot open "<< nameArg.getValue() << endl;
             return 1;
         }
