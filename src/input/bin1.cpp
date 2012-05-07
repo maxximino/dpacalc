@@ -148,10 +148,10 @@ template <class T>void SamplesInput::bin1::readSamples(shared_ptr<TracesMatrix> 
     Map<const Matrix<T,1,Eigen::Dynamic> > src = Map<const Matrix<T,1,Eigen::Dynamic> >(buffer,1,numsamples);
     // /cout << endl << "asd " << src.row(0).cast<TraceValueType>() << endl;
 
-    traces->row(curtrace).head(numsamples) = src.template cast<TraceValueType>();
-    /*for(unsigned long i = 0; i <numsamples; i++) {
+    //traces->row(curtrace).head(numsamples) = src.template cast<TraceValueType>();
+    for(unsigned long i = 0; i <numsamples; i++) {
         (*traces)(curtrace,i) = buffer[i];
-    }*/
+    }
 }
 void BufferToBitset(char *buffer,std::bitset<DATA_SIZE_BIT> &bitset) {
     for(unsigned long dim = 0; dim < DATA_SIZE_BYTE; dim++) {

@@ -25,6 +25,7 @@ protected:
     shared_ptr<GenerateIntermediateValues::base> interm;
     shared_ptr<GeneratePowerModel::base> genpm;
     shared_ptr<ExecMethod::base> exec;
+    shared_ptr<Output::base> outp;
 private:
     DPA() {}
 };

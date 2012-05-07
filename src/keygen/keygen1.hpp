@@ -8,7 +8,7 @@ public:
     virtual void init() {};
     KeyDataType getKeyFromIndex(KeyIndexType idx) {
         assert(idx < KEYNUM);
-        return idx *2; //Totally fake
+        return idx; //We are guessing first bits.
     };
 };
 }

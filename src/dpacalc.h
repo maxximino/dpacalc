@@ -4,21 +4,21 @@
 #include <memory>
 #include <tclap/CmdLine.h>
 #include "config.h"
+#include <boost/multi_array.hpp>
 
-
-typedef unsigned long long DataValueType;
+typedef std::bitset<DATA_SIZE_BIT> DataValueType;
 
 #define DATA_SIZE_BYTE (DATA_SIZE_BIT >> 3)
 #define KEYNUM (1 <<KEY_HYP_BIT)
 
 typedef unsigned long long KeyDataType;
 typedef unsigned long long KeyIndexType;
-typedef unsigned long long IntermediateValueType;
+typedef std::bitset<DATA_SIZE_BIT> IntermediateValueType;
 typedef float StatisticValueType;
 
 typedef Eigen::Matrix<TraceValueType,Eigen::Dynamic,BATCH_SIZE> TracesMatrix;
-typedef std::vector< std::bitset<DATA_SIZE_BIT> > DataMatrix;
-typedef Eigen::Matrix<IntermediateValueType,Eigen::Dynamic,KEYNUM> IntermediateValueMatrix;
+typedef std::vector< DataValueType > DataMatrix;
+typedef boost::multi_array< IntermediateValueType,2> IntermediateValueMatrix;
 typedef Eigen::Matrix<TraceValueType,Eigen::Dynamic,KEYNUM> PowerModelMatrix;
 typedef Eigen::Matrix<StatisticValueType,Eigen::Dynamic,KEYNUM> StatisticIndexMatrix;
 #include "includes.h"

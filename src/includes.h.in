@@ -5,3 +5,4 @@
 #include "gen_powermodel/${CONFIG_CLASS_POWERMODEL}.hpp"
 #include "statisticaltest/${CONFIG_CLASS_STATISTIC}.hpp"
 #include "exec/${CONFIG_CLASS_EXEC}.hpp"
+#include "output/${CONFIG_CLASS_OUTPUT}.hpp"

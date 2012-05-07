@@ -15,8 +15,10 @@ void DPA::doRun() //BBQ-style. This method can be started multiple times in diff
     shared_ptr<StatisticIndexMatrix> sm;
     int num = input->read(&myid,&traces);
     //cout << "Ho " << num << " sample validi. Tracce:" <<endl << *traces << endl;
+    //return;
     sm.reset(new StatisticIndexMatrix(num,KEYNUM));
     stat->generate(sm,traces,num);
+    outp->WriteBatch(num,sm);
 }
 long timevaldiff(struct timeval *starttime, struct timeval *finishtime)
 {
@@ -42,6 +44,7 @@ int DPA::main(int argc, char** argv)
     interm= shared_ptr<GenerateIntermediateValues::base>(new GenerateIntermediateValues::GENINTERMCLASS(cmd,keygen));
     genpm= shared_ptr<GeneratePowerModel::base>(new GeneratePowerModel::GENPOWERMODELCLASS(cmd));
     stat = shared_ptr<Statistic::base>(new Statistic::STATISTICCLASS(cmd));
+    outp = shared_ptr<Output::base>(new Output::OUTPUTCLASS(cmd));
     try {
         cmd.parse( argc, argv );
 
@@ -57,12 +60,13 @@ int DPA::main(int argc, char** argv)
     keygen->init();
     interm->init();
     genpm->init();
+    outp->init();
     numbatches= (input->SamplesPerTrace/BATCH_SIZE) + (((input->SamplesPerTrace%BATCH_SIZE)==0)?0:1);
     cout << "Reading known data..." <<endl;
     data = input->readData();
     cout << "Done. Calculating intermediate values.....[single threaded]" <<endl;
 
-    intval.reset( new IntermediateValueMatrix(input->NumTraces,KEYNUM));
+    intval.reset( new IntermediateValueMatrix(boost::extents[input->NumTraces][KEYNUM]));
     interm->generate(data,intval);
     data.reset(); // I don't need that data anymore.
     // cout << "Valori intermedi: " <<  endl<<*intval <<endl;
