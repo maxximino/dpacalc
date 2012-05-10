@@ -66,4 +66,3 @@ protected:
 
 
 }
-void BufferToBitset(char *buffer,std::bitset<DATA_SIZE_BIT> &bitset);

@@ -4,6 +4,7 @@
 
 #cmakedefine CONFIG_TRACETYPE_FLOAT
 #cmakedefine CONFIG_TRACETYPE_DOUBLE
+#cmakedefine CONFIG_NO_TRICKS
 
 #if defined(CONFIG_TRACETYPE_FLOAT)
 typedef float TraceValueType;

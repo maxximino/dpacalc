@@ -1,7 +1,7 @@
 #pragma once
 #include "dpacalc.h"
 #include "base.hpp"
-
+#include <fstream>
 namespace Output {
 class gnuplot: public base {
 public:
@@ -17,6 +17,7 @@ public:
 protected:
     TCLAP::ValueArg<std::string> dataNameArg;
     TCLAP::ValueArg<std::string> scriptNameArg;
+    std::ofstream dataoutp;
 };
 
 }

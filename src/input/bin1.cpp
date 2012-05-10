@@ -153,16 +153,7 @@ template <class T>void SamplesInput::bin1::readSamples(shared_ptr<TracesMatrix> 
         (*traces)(curtrace,i) = buffer[i];
     }
 }
-void BufferToBitset(char *buffer,std::bitset<DATA_SIZE_BIT> &bitset) {
-    for(unsigned long dim = 0; dim < DATA_SIZE_BYTE; dim++) {
-        if(dim>0) {
-            bitset <<= 8;
-        }
-        bitset |= *buffer;
-        buffer++;
-    }
 
-}
 
 std::shared_ptr< DataMatrix > SamplesInput::bin1::readData()
 {
@@ -174,7 +165,7 @@ std::shared_ptr< DataMatrix > SamplesInput::bin1::readData()
     data.reset( new DataMatrix(NumTraces));
     for(unsigned long cur_trace=0; cur_trace<NumTraces; cur_trace++) {
         buffer = (char*)fileoffset +  getDataOffset(cur_trace);
-        BufferToBitset(buffer,(*data)[cur_trace]);
+        BufferToBitset<DATA_SIZE_BYTE>(buffer,(*data)[cur_trace]);
     }
     input_mutex.unlock();
     return shared_ptr<DataMatrix>(data);

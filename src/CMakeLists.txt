@@ -17,5 +17,5 @@ set(outputsources output/${CONFIG_CLASS_OUTPUT}.cpp)
 
 configure_file( config.h.in ${CMAKE_SOURCE_DIR}/config.h)
 configure_file( includes.h.in ${CMAKE_SOURCE_DIR}/includes.h)
-set(DPACALC_SRCS main.cpp ${inputsources} ${keygensources} ${intermediatesources} ${powermodelsources} ${statisticsources} ${execsources}  ${outputsources} )
+set(DPACALC_SRCS utils.cpp main.cpp ${inputsources} ${keygensources} ${intermediatesources} ${powermodelsources} ${statisticsources} ${execsources}  ${outputsources} )
 add_executable(dpacalc ${DPACALC_SRCS})

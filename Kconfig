@@ -23,7 +23,12 @@ menu "Basic settings"
     config TRACETYPE_DOUBLE
 	    bool "Double"
   endchoice
-endmenu
+
+config NO_TRICKS 
+        bool "Disable non-semantically-correct but working optimitations"
+	default n
+
+  endmenu
 menu "Compilation options"
   choice
 	prompt "Build type"

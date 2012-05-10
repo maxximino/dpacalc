@@ -66,7 +66,7 @@ int DPA::main(int argc, char** argv)
     data = input->readData();
     cout << "Done. Calculating intermediate values.....[single threaded]" <<endl;
 
-    intval.reset( new IntermediateValueMatrix(boost::extents[input->NumTraces][KEYNUM]));
+    intval.reset(  new IntermediateValueMatrix(input->NumTraces,KEYNUM));
     interm->generate(data,intval);
     data.reset(); // I don't need that data anymore.
     // cout << "Valori intermedi: " <<  endl<<*intval <<endl;
