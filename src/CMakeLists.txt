@@ -6,8 +6,11 @@ INCLUDE (${CMAKE_SOURCE_DIR}/../dpacalc-config.cmake)
 
 find_package(Eigen REQUIRED)
 find_package(TCLAP REQUIRED)
-include_directories(${EIGEN_INCLUDE_DIRS} ${TCLAP_INCLUDE_DIR} ${CMAKE_SOURCE_DIR})
-set( CMAKE_CXX_FLAGS "-std=c++0x -Wall -Werror ${CONFIG_DEBUG_OPTIONS} ${CONFIG_OPTIMIZATION_OPTIONS} -lpthread ") 
+find_package(Bbque REQUIRED)
+
+include_directories(${EIGEN_INCLUDE_DIRS} ${TCLAP_INCLUDE_DIR} ${CMAKE_SOURCE_DIR} ${BBQUE_INCLUDE_DIR} )
+
+set( CMAKE_CXX_FLAGS "-std=c++0x -Wall -Werror ${CONFIG_DEBUG_OPTIONS} ${CONFIG_OPTIMIZATION_OPTIONS}" ) 
 set(inputsources input/${CONFIG_CLASS_INPUT}.cpp)
 set(keygensources keygen/${CONFIG_CLASS_KEYGEN}.cpp)
 set(intermediatesources gen_intermediate/${CONFIG_CLASS_INTERMEDIATE}.cpp)
@@ -20,3 +23,5 @@ configure_file( config.h.in ${CMAKE_SOURCE_DIR}/config.h)
 configure_file( includes.h.in ${CMAKE_SOURCE_DIR}/includes.h)
 set(DPACALC_SRCS utils.cpp main.cpp ${inputsources} ${keygensources} ${intermediatesources} ${powermodelsources} ${statisticsources} ${execsources}  ${outputsources} )
 add_executable(dpacalc ${DPACALC_SRCS})
+target_link_libraries (dpacalc pthread ${BBQUE_RTLIB})
+
