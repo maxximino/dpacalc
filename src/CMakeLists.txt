@@ -6,7 +6,7 @@ INCLUDE (${CMAKE_SOURCE_DIR}/../dpacalc-config.cmake)
 
 find_package(Eigen REQUIRED)
 find_package(TCLAP REQUIRED)
-include_directories(${EIGEN_INCLUDE_DIRS} ${TCLAP_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR})
+include_directories(${EIGEN_INCLUDE_DIRS} ${TCLAP_INCLUDE_DIR} ${CMAKE_SOURCE_DIR})
 set( CMAKE_CXX_FLAGS "-std=c++0x -Wall -Werror ${CONFIG_DEBUG_OPTIONS} ${CONFIG_OPTIMIZATION_OPTIONS} -lpthread ") 
 set(inputsources input/${CONFIG_CLASS_INPUT}.cpp)
 set(keygensources keygen/${CONFIG_CLASS_KEYGEN}.cpp)
