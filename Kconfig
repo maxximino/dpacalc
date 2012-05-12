@@ -82,6 +82,5 @@ config CLASS_EXEC
 
 config CLASS_OUTPUT
 	  string "Name of the class that writes output data"
-	  default "gnuplot"
- 
+	  default "multiple"
 endmenu

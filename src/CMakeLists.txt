@@ -13,7 +13,7 @@ set(intermediatesources gen_intermediate/${CONFIG_CLASS_INTERMEDIATE}.cpp)
 set(powermodelsources gen_powermodel/${CONFIG_CLASS_POWERMODEL}.cpp)
 set(statisticsources statisticaltest/${CONFIG_CLASS_STATISTIC}.cpp)
 set(execsources exec/${CONFIG_CLASS_EXEC}.cpp)
-set(outputsources output/${CONFIG_CLASS_OUTPUT}.cpp)
+FILE(GLOB outputsources output/*.cpp)
 
 configure_file( config.h.in ${CMAKE_SOURCE_DIR}/config.h)
 configure_file( includes.h.in ${CMAKE_SOURCE_DIR}/includes.h)

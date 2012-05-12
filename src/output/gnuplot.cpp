@@ -43,7 +43,6 @@ void Output::gnuplot::WriteBatch(unsigned long long id, shared_ptr< StatisticInd
         this->emptyQueue();
     }
     else {
-        cout << "in queue"<<endl;
         wqueue.insert(pair<unsigned long long,shared_ptr< StatisticIndexMatrix > >(id, shared_ptr<StatisticIndexMatrix>(s)));
     }
     queueMutex.unlock();
@@ -75,6 +74,7 @@ void Output::gnuplot::RealWriteBatch(unsigned long long id,shared_ptr< Statistic
 void Output::gnuplot::end()
 {
     Output::base::end();
-    cout << "Fine con " << wqueue.size() << " elementi in coda" << endl;
+    dataoutp.close();
+//    cout << "Fine con " << wqueue.size() << " elementi in coda" << endl;
 }
 
