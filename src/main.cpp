@@ -2,6 +2,7 @@
 #include "statisticaltest/base.hpp"
 #include <iostream>
 #include <fstream>
+#include "includes.h"
 #include "main.hpp"
 #include <sys/time.h>
 #define VERSION "0.01alpha"
@@ -18,7 +19,7 @@ void DPA::doRun() //BBQ-style. This method can be started multiple times in diff
     //return;
     sm.reset(new StatisticIndexMatrix(num,KEYNUM));
     stat->generate(sm,traces,num);
-    outp->WriteBatch(num,sm);
+    outp->WriteBatch(myid,sm);
 }
 long timevaldiff(struct timeval *starttime, struct timeval *finishtime)
 {
@@ -40,11 +41,12 @@ int DPA::main(int argc, char** argv)
 
     exec = shared_ptr<ExecMethod::base>(new ExecMethod::EXECCLASS(cmd));
     input = shared_ptr<SamplesInput::base>(new SamplesInput::INPUTCLASS(cmd));
-    keygen= shared_ptr<KeyGenerators::KEYGENCLASS>(new KeyGenerators::KEYGENCLASS(cmd));
+    keygen= shared_ptr<KeyGenerators::base>(new KeyGenerators::KEYGENCLASS(cmd));
     interm= shared_ptr<GenerateIntermediateValues::base>(new GenerateIntermediateValues::GENINTERMCLASS(cmd,keygen));
     genpm= shared_ptr<GeneratePowerModel::base>(new GeneratePowerModel::GENPOWERMODELCLASS(cmd));
     stat = shared_ptr<Statistic::base>(new Statistic::STATISTICCLASS(cmd));
-    outp = shared_ptr<Output::base>(new Output::OUTPUTCLASS(cmd));
+    outp = shared_ptr<Output::base>(new Output::OUTPUTCLASS(cmd,keygen));
+    this->ShowCompileTimeOptions();
     try {
         cmd.parse( argc, argv );
 
@@ -84,12 +86,28 @@ int DPA::main(int argc, char** argv)
     cout << "Done. Starting statistic test pass 1 [multithreaded]" <<endl;
     exec->RunAndWait(numbatches);
     gettimeofday(&end,NULL);
-
+    outp->end();
     printf ("Elaboration took %li milliseconds.\n", timevaldiff(&start,&end));
 
     //cout << "Done. Result:" <<endl << *sm <<endl;
     return 0;
 
+}
+void DPA::ShowCompileTimeOptions()
+{
+    cout << "DPAcalc was compiled with : "<< endl;
+    cout << "Batch size : " << BATCH_SIZE << endl;
+    cout << "Number of bit of the key to guess : " << KEY_HYP_BIT << endl;
+    cout << "Size of known data : " << DATA_SIZE_BIT << " bit " << endl;
+    cout << "Size of key : " << KEY_SIZE_BIT << " bit " << endl;
+    cout << endl;
+    cout << "Name of the class that reads input file: " << INPUTCLASS_STR << endl;
+    cout << "Name of the class that generates intermediate values: " << GENINTERMCLASS_STR << endl;
+    cout << "Name of the class that generates power model: " << GENPOWERMODELCLASS_STR << endl;
+    cout << "Name of the class that calculates statistic data: " << STATISTICCLASS_STR << endl;
+    cout << "Name of the class that manages parallelization: " << EXECCLASS_STR << endl;
+    cout << "Name of the class that writes output: " << OUTPUTCLASS_STR << endl;
+    cout << endl;
 }
 
 int main(int argc,char**argv)

@@ -12,6 +12,10 @@ menu "Basic settings"
   config KEY_HYPOTESIS
 	  int "How many bits of the key should I try to guess?"
 	  default 3
+  config FULL_KEY_SIZE
+	  int "How large is the key? (bits)"
+	  default 128
+
   config KNOWNDATA_BITS
 	  int "How large is the plain/ciphertext? (bits)"
 	  default 64
