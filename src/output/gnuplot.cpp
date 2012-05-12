@@ -64,7 +64,7 @@ void Output::gnuplot::RealWriteBatch(unsigned long long id,shared_ptr< Statistic
     //*s=s->cwiseAbs();
     //cout << "Writing batch " << id << endl;
     for(long long r=0; r < s->rows(); r++) {
-        dataoutp << r ;
+        dataoutp << (id * BATCH_SIZE) + r ;
         for(long long c=0; c < s->cols(); c++) {
             dataoutp << "\t" << (*s)(r,c);
         }

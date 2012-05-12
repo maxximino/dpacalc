@@ -2,7 +2,8 @@
 #include <iostream>
 #include <mutex>
 #include "dpacalc.h"
-#include "includes.h"
+#include "keygen/base.hpp"
+
 using namespace Eigen;
 using namespace std;
 namespace GenerateIntermediateValues {

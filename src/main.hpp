@@ -1,6 +1,14 @@
 #pragma once
 #include "dpacalc.h"
 #include <mutex>
+#include "input/base.hpp"
+#include "keygen/base.hpp"
+#include "gen_intermediate/base.hpp"
+#include "gen_powermodel/base.hpp"
+#include "statisticaltest/base.hpp"
+#include "exec/base.hpp"
+#include "output/base.hpp"
+
 using namespace Eigen;
 using namespace std;
 

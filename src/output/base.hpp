@@ -1,5 +1,6 @@
 #pragma once
 #include "dpacalc.h"
+#include "keygen/base.hpp"
 using namespace std;
 namespace Output {
 class base {

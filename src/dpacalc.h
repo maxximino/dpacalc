@@ -25,3 +25,4 @@ typedef Eigen::Matrix<StatisticValueType,Eigen::Dynamic,KEYNUM> StatisticIndexMa
 
 #include <memory>
 #include <iostream>
+
