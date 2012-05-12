@@ -25,25 +25,25 @@ void GenerateIntermediateValues::int1::generate(shared_ptr<DataMatrix> &knowndat
         for(unsigned long trcidx = 0; trcidx < knowndata->size(); trcidx++) {
             BitsetToBuffer<DATA_SIZE_BYTE>((*knowndata)[trcidx],(char*)&fullaesdata);
             AddRoundKey(fullaesdata,UnrolledRoundKey[0]);
-	    (*intval)(trcidx,keyidx)=0;
-	    switch(sboxnumArg.getValue()){
-	      case 8:
-            (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+7))])<<54;
-	    case 7:
-	    (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+6))])<<48;
-	    case 6:
-	    (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+5))])<<40;
-	    case 5:
-	    (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+4))])<<32;
-	    case 4:
-	    (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+3))])<<24;
-	    case 3:
-	    (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+2))])<<16;
-	    case 2:
-	    (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+1))])<<8;
-	    case 1:
-	    (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr))]);
-	    }
+            (*intval)(trcidx,keyidx)=0;
+            switch(sboxnumArg.getValue()) {
+            case 8:
+                (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+7))])<<54;
+            case 7:
+                (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+6))])<<48;
+            case 6:
+                (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+5))])<<40;
+            case 5:
+                (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+4))])<<32;
+            case 4:
+                (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+3))])<<24;
+            case 3:
+                (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+2))])<<16;
+            case 2:
+                (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+1))])<<8;
+            case 1:
+                (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr))]);
+            }
         }
     }
 }
