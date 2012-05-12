@@ -2,7 +2,7 @@
 INPUT=$1
 echo --- DPAcalc should be compiled to guess 8 bit of the key per execution ---
 for i in $(seq 0 15); do
-#	./out/dpacalc --filename $INPUT --mlock --script-output gnuplot_script_$i --output data_$i --sboxnum 1 --sbox $i --shiftkey $(echo $i \* 8 |bc) |tee dpacalc_output_$i
+	./out/dpacalc --filename $INPUT --mlock --script-output gnuplot_script_$i --output data_$i --sboxnum 1 --sbox $i --shiftkey $(echo $i \* 8 |bc) |tee dpacalc_output_$i
 echo
 done
 echo The entire key should be:
