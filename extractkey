@@ -8,6 +8,6 @@ done
 echo The entire key should be:
 for i in $(seq 0 15); do
 	# dpacalc_output_$i
-	echo -n $(cat dpacalc_output_$i |grep 'best key hypotesis' |cut -f2 -d:)
+	echo -n $(cat dpacalc_output_$i |grep 'best key hypotesis' |cut -f2 -d:) |sed 's/^\([0-9a-f]\)$/0\1/'
 done
 echo
