@@ -145,7 +145,7 @@ template <class T>void SamplesInput::bin1::readSamples(shared_ptr<TracesMatrix> 
     buffer = (T*)((char*)fileoffset + getSampleOffset(curtrace,startingsample));
 //   input->read((char*)(&buffer),sizeof(T)*numsamples);
 
-    Map<const Matrix<T,1,Eigen::Dynamic> > src = Map<const Matrix<T,1,Eigen::Dynamic> >(buffer,1,numsamples);
+    //Map<const Matrix<T,1,Eigen::Dynamic> > src = Map<const Matrix<T,1,Eigen::Dynamic> >(buffer,1,numsamples);
     // /cout << endl << "asd " << src.row(0).cast<TraceValueType>() << endl;
 
     //traces->row(curtrace).head(numsamples) = src.template cast<TraceValueType>();

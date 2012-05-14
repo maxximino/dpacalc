@@ -4,7 +4,7 @@
 #include <iostream>
 void GenerateIntermediateValues::int1::init()
 {
-    if(whichsboxArg.getValue() + sboxnumArg.getValue() > AES_STATE_BYTES_NO || whichsboxArg.getValue() < 0 || sboxnumArg.getValue() < 0) {
+    if(whichsboxArg.getValue() + sboxnumArg.getValue() > AES_STATE_BYTES_NO || whichsboxArg.getValue() < 0 || sboxnumArg.getValue() < 1) {
         cerr << "Maximum number of SBOXes exceeded." <<endl;
         exit(1);
     }
@@ -28,7 +28,7 @@ void GenerateIntermediateValues::int1::generate(shared_ptr<DataMatrix> &knowndat
             (*intval)(trcidx,keyidx)=0;
             switch(sboxnumArg.getValue()) {
             case 8:
-                (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+7))])<<54;
+                (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+7))])<<56;
             case 7:
                 (*intval)(trcidx,keyidx) += ((IntermediateValueType)SBOX[(*(dataptr+6))])<<48;
             case 6:
