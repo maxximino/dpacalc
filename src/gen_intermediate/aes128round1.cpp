@@ -1,7 +1,7 @@
 #include "dpacalc.h"
-#include "int1.hpp"
+#include "aes128round1.hpp"
 #include "aes.h"
-void GenerateIntermediateValues::int1::init()
+void GenerateIntermediateValues::aes128round1::init()
 {
 	if ( whichsboxArg.getValue() + sboxnumArg.getValue() > AES_STATE_BYTES_NO || whichsboxArg.getValue() < 0 || sboxnumArg.getValue() < 1 ) {
 		cerr << "Maximum number of SBOXes exceeded." << endl;
@@ -9,7 +9,7 @@ void GenerateIntermediateValues::int1::init()
 	}
 }
 
-void GenerateIntermediateValues::int1::generate ( shared_ptr<DataMatrix>& knowndata, shared_ptr<IntermediateValueMatrix>& intval )
+void GenerateIntermediateValues::aes128round1::generate ( shared_ptr<DataMatrix>& knowndata, shared_ptr<IntermediateValueMatrix>& intval )
 {
 	std::bitset<KEY_SIZE_BIT> key;
 	uint8_t fullaeskey[AES_STATE_BYTES_NO];

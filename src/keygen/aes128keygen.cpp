@@ -1,7 +1,7 @@
-#include "keygen1.hpp"
+#include "aes128keygen.hpp"
 #include <iostream>
 using namespace std;
-KeyDataType KeyGenerators::keygen1::getKeyFromIndex ( KeyIndexType idx )
+KeyDataType KeyGenerators::aes128keygen::getKeyFromIndex ( KeyIndexType idx )
 {
 	assert ( idx < KEYNUM );
 	std::bitset<KEY_SIZE_BIT> key = std::bitset<KEY_SIZE_BIT> ( idx );
@@ -11,7 +11,7 @@ KeyDataType KeyGenerators::keygen1::getKeyFromIndex ( KeyIndexType idx )
 	return key;
 }
 
-void KeyGenerators::keygen1::init()
+void KeyGenerators::aes128keygen::init()
 {
 	if ( shiftbitsArgs.getValue() > ( KEY_SIZE_BIT - KEY_HYP_BIT ) || shiftbitsArgs.getValue() < 0 ) {
 		std::cerr << "You cannot shift more than " << ( KEY_SIZE_BIT - KEY_HYP_BIT ) << " bits because you're guessing " << KEY_HYP_BIT << "bits out of " << KEY_SIZE_BIT << std::endl;

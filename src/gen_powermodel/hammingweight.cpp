@@ -1,6 +1,6 @@
 #include "dpacalc.h"
-#include "pm1.hpp"
-void GeneratePowerModel::pm1::generate ( shared_ptr<IntermediateValueMatrix>& intval, shared_ptr<PowerModelMatrix>& pm )
+#include "hammingweight.hpp"
+void GeneratePowerModel::hammingweight::generate ( shared_ptr<IntermediateValueMatrix>& intval, shared_ptr<PowerModelMatrix>& pm )
 {
 	std::bitset<sizeof ( IntermediateValueType ) *8> tmp;
 	IntermediateValueType value;

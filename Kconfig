@@ -6,19 +6,17 @@ menu "Basic settings"
 
   config BATCH_SIZE 
 	  int "How many samples should I process in a row?"
-	  default 5
-	  ---help---
-	  5 for tests, in "real life" it should be much bigger
+	  default 500
   config KEY_HYPOTESIS
 	  int "How many bits of the key should I try to guess?"
-	  default 3
+	  default 8
   config FULL_KEY_SIZE
 	  int "How large is the key? (bits)"
 	  default 128
 
   config KNOWNDATA_BITS
 	  int "How large is the plain/ciphertext? (bits)"
-	  default 64
+	  default 128
 	  
   choice
 	prompt "Matrix data type"
@@ -66,15 +64,15 @@ config CLASS_INPUT
   
 config CLASS_KEYGEN
 	  string "Name of the class that associates key index to real key value"
-	  default "keygen1"
+	  default "aes128keygen"
   
 config CLASS_INTERMEDIATE
 	  string "Name of the class that computes the intermediate value"
-	  default "int1"
+	  default "aes128round1"
   
 config CLASS_POWERMODEL
 	  string "Name of the class that computes the power model"
-	  default "pm1"
+	  default "hammingweight"
 
 config CLASS_STATISTIC
 	  string "Name of the class that computes statistic tests"
@@ -82,7 +80,7 @@ config CLASS_STATISTIC
 
 config CLASS_EXEC
 	  string "Name of the class that manages threads"
-	  default "seq_monocore"
+	  default "cxx11threads"
 
 config CLASS_OUTPUT
 	  string "Name of the class that writes output data"

@@ -5,10 +5,10 @@
 #include <iostream>
 namespace KeyGenerators
 {
-	class keygen1: public base
+	class aes128keygen: public base
 	{
 		public:
-			keygen1 ( TCLAP::CmdLine& cmd ) : base ( cmd ), shiftbitsArgs ( "k", "shiftkey", "Shift key hypotesis bits on the left by X bits", false, 0, "int" ) {
+			aes128keygen ( TCLAP::CmdLine& cmd ) : base ( cmd ), shiftbitsArgs ( "k", "shiftkey", "Shift key hypotesis bits on the left by X bits", false, 0, "int" ) {
 				cmd.add ( shiftbitsArgs );
 			};
 			virtual void init();
