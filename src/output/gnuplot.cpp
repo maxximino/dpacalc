@@ -33,9 +33,11 @@ void Output::gnuplot::init()
     }
     scriptoutp.close();
 }
+//this queue system is not designed to enhance output performance, but to ensure output correctness.
+// (batches with higher ID cannot write to the output before previous batches)
 void Output::gnuplot::WriteBatch(unsigned long long id, shared_ptr< StatisticIndexMatrix >& s) {
     queueMutex.lock();
-    //if(id==2)id=3;else if(id==3)id=2; // Ugly, destroys final output, but demonstrates the problem.
+    //if(id==2)id=3;else if(id==3)id=2; // Ugly, destroys final output, but clearly demonstrates the problem.
     if(id == doneId+1) {
 
         this->RealWriteBatch(id,s);
@@ -46,7 +48,7 @@ void Output::gnuplot::WriteBatch(unsigned long long id, shared_ptr< StatisticInd
         wqueue.insert(pair<unsigned long long,shared_ptr< StatisticIndexMatrix > >(id, shared_ptr<StatisticIndexMatrix>(s)));
     }
     queueMutex.unlock();
-    //this is not designed to enhance output performance, but just to ensure output correctness. (batch with higher ID cannot write before previous batches)
+    
 }
 void Output::gnuplot::emptyQueue()
 {
@@ -60,8 +62,6 @@ void Output::gnuplot::emptyQueue()
 
 void Output::gnuplot::RealWriteBatch(unsigned long long id,shared_ptr< StatisticIndexMatrix >& s)
 {
-    //*s=s->cwiseAbs();
-    //cout << "Writing batch " << id << endl;
     for(long long r=0; r < s->rows(); r++) {
         dataoutp << (id * BATCH_SIZE) + r ;
         for(long long c=0; c < s->cols(); c++) {
@@ -75,6 +75,5 @@ void Output::gnuplot::end()
 {
     Output::base::end();
     dataoutp.close();
-//    cout << "Fine con " << wqueue.size() << " elementi in coda" << endl;
 }
 

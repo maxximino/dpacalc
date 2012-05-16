@@ -1,7 +1,6 @@
 #pragma once
 #include "dpacalc.h"
 #include "base.hpp"
-#include <mutex>
 #include <bbque/bbque_exc.h>
 
 using bbque::rtlib::BbqueEXC;
@@ -10,7 +9,7 @@ namespace ExecMethod {
 class bbque: public base {
 public:
     bbque(TCLAP::CmdLine& cmd):base(cmd) {}
-    virtual void RunAndWait(unsigned long numberoftimes);  //What should I run? DPA::onRun(); called on the right thread.
+    virtual void RunAndWait(unsigned long numberoftimes);
 };
 class BbqueClass: public BbqueEXC {
 public:

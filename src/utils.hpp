@@ -29,10 +29,12 @@ template <int Nbytes> void BitsetToBuffer(std::bitset<Nbytes*8> &bitset,char *bu
 }
 #else
 #include <string.h>
-template <int Nbytes> void BufferToBitset(char *buffer,std::bitset<Nbytes*8> &bitset) {
+template <int Nbytes> inline void BufferToBitset(char *buffer,std::bitset<Nbytes*8> &bitset) {
     memcpy(&bitset,buffer,Nbytes);
 }
-template <int Nbytes> void BitsetToBuffer(std::bitset<Nbytes*8> &bitset,char *buffer) {
+template <int Nbytes> inline void BitsetToBuffer(std::bitset<Nbytes*8> &bitset,char *buffer) {
     memcpy(buffer,&bitset,Nbytes);
 }
 #endif
+
+long timevaldiff(struct timeval *starttime, struct timeval *finishtime);

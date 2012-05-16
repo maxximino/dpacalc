@@ -1,7 +1,8 @@
 #pragma once
-#include <Eigen/Dense>
 #include <bitset>
 #include <memory>
+#include <iostream>
+#include <Eigen/Dense>
 #include <tclap/CmdLine.h>
 #include "config.h"
 #include "utils.hpp"
@@ -23,6 +24,4 @@ typedef Eigen::Matrix<IntermediateValueType,Eigen::Dynamic,KEYNUM> IntermediateV
 typedef Eigen::Matrix<TraceValueType,Eigen::Dynamic,KEYNUM> PowerModelMatrix;
 typedef Eigen::Matrix<StatisticValueType,Eigen::Dynamic,KEYNUM> StatisticIndexMatrix;
 
-#include <memory>
-#include <iostream>
 

@@ -8,7 +8,6 @@ void Statistic::pearson::init(shared_ptr< PowerModelMatrix >& _pm)
     pmexpect = Matrix<TraceValueType,Dynamic,KEYNUM> ( pm->rows(),KEYNUM );
     for ( long d = 0; d < KEYNUM; d++ )
     {
-        //Rischio di sum overflow? si può fare approccio tipo ricerca binaria, ma efficienza cala.
         pmaverage ( 0,d ) = pm->col(d).array().sum() / pm->col(d).array().count();
     }
     for (long d = 0; d < pm->cols(); d++ )
@@ -24,17 +23,17 @@ void Statistic::pearson::init(shared_ptr< PowerModelMatrix >& _pm)
 void Statistic::pearson::generate(shared_ptr<StatisticIndexMatrix> &stat, shared_ptr< TracesMatrix >& traces, long unsigned int numvalid)
 {
     /*PSEUDOCODE:
-     per ogni istante di tempo:
-     Calcolarsi medie avg(t(j))
-     Per ogni tempo e ipotesi di chiave:
-    stat(j,l) = dividendo/divisore
-    dividendo = sum(i){t(i,j)-mediat(j))*pmexpect(i,l)}
-    divisore = sqrt(sum(i)^2{t(i,j)-*mediat(j)} * sum(i){pmexpect_squared(i,l)} )
+     For each time instant:
+     Calculating averages avg(t(j))
+     For each time and key hypotesis:
+    stat(j,l) = dividend/divisor
+    dividend = sum(i){t(i,j)-mediat(j))*pmexpect(i,l)}
+    divisor = sqrt(sum(i)^2{t(i,j)-*mediat(j)} * sum(i){pmexpect_squared(i,l)} )
+    Real code calculates all dividens and divisors together for each row, and then divides entire rows,
+    to enable Eigen to better optimize those operations.
     */
     assert(numvalid <= BATCH_SIZE);
     TraceValueType tavg;
-    // StatisticValueType dividendo;
-    // StatisticValueType divisore;
     auto dividendi = shared_ptr<Matrix<StatisticValueType,1,KEYNUM> >(new Matrix<StatisticValueType,1,KEYNUM>() );
     auto divisori = shared_ptr<Matrix<StatisticValueType,1,KEYNUM> >(new Matrix<StatisticValueType,1,KEYNUM>() );
     for(unsigned long long time=0; time < numvalid; time++) {

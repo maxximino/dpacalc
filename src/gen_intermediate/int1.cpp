@@ -1,7 +1,6 @@
 #include "dpacalc.h"
 #include "int1.hpp"
 #include "aes.h"
-#include <iostream>
 void GenerateIntermediateValues::int1::init()
 {
     if(whichsboxArg.getValue() + sboxnumArg.getValue() > AES_STATE_BYTES_NO || whichsboxArg.getValue() < 0 || sboxnumArg.getValue() < 1) {

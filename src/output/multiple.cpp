@@ -3,8 +3,13 @@
 #include "gnuplot.hpp"
 Output::multiple::multiple(TCLAP::CmdLine& cmd, shared_ptr< KeyGenerators::base > _keygen):base(cmd,_keygen),outputs()
 {
+    //Order here is important because coarseresult voluntarily modifies the matrix. (takes the absolute value of cells)
     outputs.push_back(shared_ptr<Output::base>(new Output::coarseresult(cmd,keygen)));
+    //while gnuplot takes only a reference when puts the matrix in the queue.
     outputs.push_back(shared_ptr<Output::base>(new Output::gnuplot(cmd,keygen)));
+    //Having them inverted, could cause some intervals of time with proper sign, and others in absolute value.
+    //So we get the plot of absolute values.
+    //Having the plot with proper sign costs a copy of the matrix. It is not worth it.
 }
 void Output::multiple::end()
 {

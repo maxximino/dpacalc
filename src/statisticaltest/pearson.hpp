@@ -1,6 +1,4 @@
 #pragma once
-#include <iostream>
-#include <Eigen/Dense>
 #include "dpacalc.h"
 #include "base.hpp"
 #include <map>

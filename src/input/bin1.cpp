@@ -1,13 +1,11 @@
 #include "bin1.hpp"
 #include <algorithm>
-#include <thread>
 #include <sys/mman.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
-//Here we can implement some sort of disk prefetching.
 long long unsigned int SamplesInput::bin1::read(long long unsigned int* id, shared_ptr< TracesMatrix >* traces)
 {
     queueelement qe;
@@ -111,10 +109,8 @@ void SamplesInput::bin1::populateQueue()
     qe.size=num;
     qe.id=CurrentId;
     qe.traces = shared_ptr<TracesMatrix>(new TracesMatrix(NumTraces,BATCH_SIZE));
-
     //  cout << "I'm going to allocate a " << NumTraces << " * " << BATCH_SIZE << " * " << sizeof(TraceValueType) << " = " << (NumTraces*BATCH_SIZE*sizeof(TraceValueType)/1024) << " kb matrix"<<endl;
     for(cur_trace=0; cur_trace<NumTraces; cur_trace++) {
-        //   input->seekg(getSampleOffset(cur_trace,CurrentSample),ios::beg);
         switch(sampletype) {
         case 'b':
             readSamples<uint8_t>(qe.traces,cur_trace,mysample,num);
@@ -143,12 +139,6 @@ template <class T>void SamplesInput::bin1::readSamples(shared_ptr<TracesMatrix> 
     T* buffer;
     //File is big enough, checked right after open.
     buffer = (T*)((char*)fileoffset + getSampleOffset(curtrace,startingsample));
-//   input->read((char*)(&buffer),sizeof(T)*numsamples);
-
-    //Map<const Matrix<T,1,Eigen::Dynamic> > src = Map<const Matrix<T,1,Eigen::Dynamic> >(buffer,1,numsamples);
-    // /cout << endl << "asd " << src.row(0).cast<TraceValueType>() << endl;
-
-    //traces->row(curtrace).head(numsamples) = src.template cast<TraceValueType>();
     for(unsigned long i = 0; i <numsamples; i++) {
         (*traces)(curtrace,i) = buffer[i];
     }

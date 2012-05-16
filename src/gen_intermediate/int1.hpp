@@ -1,7 +1,4 @@
 #pragma once
-#include <iostream>
-#include <Eigen/Dense>
-#include "config.h"
 #include "base.hpp"
 using namespace Eigen;
 using namespace std;

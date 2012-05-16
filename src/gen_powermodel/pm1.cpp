@@ -11,5 +11,4 @@ void GeneratePowerModel::pm1::generate(shared_ptr<IntermediateValueMatrix> &intv
             (*pm)(d,k) = tmp.count();
         }
     }
-    // cout << "---------- PM ------------------- " <<endl << *pm << endl << "---------------------------------------" << endl;
 }

@@ -1,6 +1,4 @@
 #pragma once
-#include <iostream>
-#include <mutex>
 #include "dpacalc.h"
 #include "keygen/base.hpp"
 
@@ -11,7 +9,6 @@ class base {
 public:
     base(TCLAP::CmdLine &cmd,shared_ptr<KeyGenerators::base> _keygen):keygen(_keygen) {};
     virtual void init() {};
-
     virtual void generate(shared_ptr<DataMatrix> &knowndata,shared_ptr<IntermediateValueMatrix> &intval)=0;
 
 protected:
