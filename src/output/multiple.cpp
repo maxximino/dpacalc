@@ -1,33 +1,33 @@
 #include "multiple.hpp"
 #include "coarseresult.hpp"
 #include "gnuplot.hpp"
-Output::multiple::multiple(TCLAP::CmdLine& cmd, shared_ptr< KeyGenerators::base > _keygen):base(cmd,_keygen),outputs()
+Output::multiple::multiple ( TCLAP::CmdLine& cmd, shared_ptr< KeyGenerators::base > _keygen ) : base ( cmd, _keygen ), outputs()
 {
-    //Order here is important because coarseresult voluntarily modifies the matrix. (takes the absolute value of cells)
-    outputs.push_back(shared_ptr<Output::base>(new Output::coarseresult(cmd,keygen)));
-    //while gnuplot takes only a reference when puts the matrix in the queue.
-    outputs.push_back(shared_ptr<Output::base>(new Output::gnuplot(cmd,keygen)));
-    //Having them inverted, could cause some intervals of time with proper sign, and others in absolute value.
-    //So we get the plot of absolute values.
-    //Having the plot with proper sign costs a copy of the matrix. It is not worth it.
+	//Order here is important because coarseresult voluntarily modifies the matrix. (takes the absolute value of cells)
+	outputs.push_back ( shared_ptr<Output::base> ( new Output::coarseresult ( cmd, keygen ) ) );
+	//while gnuplot takes only a reference when puts the matrix in the queue.
+	outputs.push_back ( shared_ptr<Output::base> ( new Output::gnuplot ( cmd, keygen ) ) );
+	//Having them inverted, could cause some intervals of time with proper sign, and others in absolute value.
+	//So we get the plot of absolute values.
+	//Having the plot with proper sign costs a copy of the matrix. It is not worth it.
 }
 void Output::multiple::end()
 {
-    Output::base::end();
-    for (vector<shared_ptr<Output::base> >::iterator it = outputs.begin(); it!=outputs.end(); ++it) {
-        (*it)->end();
-    }
+	Output::base::end();
+	for ( vector<shared_ptr<Output::base> >::iterator it = outputs.begin(); it != outputs.end(); ++it ) {
+		( *it )->end();
+	}
 }
 void Output::multiple::init()
 {
-    Output::base::init();
-    for (vector<shared_ptr<Output::base> >::iterator it = outputs.begin(); it!=outputs.end(); ++it) {
-        (*it)->init();
-    }
+	Output::base::init();
+	for ( vector<shared_ptr<Output::base> >::iterator it = outputs.begin(); it != outputs.end(); ++it ) {
+		( *it )->init();
+	}
 }
-void Output::multiple::WriteBatch(long long unsigned int id, shared_ptr< StatisticIndexMatrix >& s)
+void Output::multiple::WriteBatch ( long long unsigned int id, shared_ptr< StatisticIndexMatrix >& s )
 {
-    for (vector<shared_ptr<Output::base> >::iterator it = outputs.begin(); it!=outputs.end(); ++it) {
-        (*it)->WriteBatch(id,s);
-    }
+	for ( vector<shared_ptr<Output::base> >::iterator it = outputs.begin(); it != outputs.end(); ++it ) {
+		( *it )->WriteBatch ( id, s );
+	}
 }

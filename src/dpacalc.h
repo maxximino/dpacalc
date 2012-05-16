@@ -18,10 +18,10 @@ typedef unsigned long KeyIndexType;
 typedef unsigned long long IntermediateValueType;
 typedef float StatisticValueType;
 
-typedef Eigen::Matrix<TraceValueType,Eigen::Dynamic,BATCH_SIZE> TracesMatrix;
+typedef Eigen::Matrix<TraceValueType, Eigen::Dynamic, BATCH_SIZE> TracesMatrix;
 typedef std::vector< DataValueType > DataMatrix;
-typedef Eigen::Matrix<IntermediateValueType,Eigen::Dynamic,KEYNUM> IntermediateValueMatrix;
-typedef Eigen::Matrix<TraceValueType,Eigen::Dynamic,KEYNUM> PowerModelMatrix;
-typedef Eigen::Matrix<StatisticValueType,Eigen::Dynamic,KEYNUM> StatisticIndexMatrix;
+typedef Eigen::Matrix<IntermediateValueType, Eigen::Dynamic, KEYNUM> IntermediateValueMatrix;
+typedef Eigen::Matrix<TraceValueType, Eigen::Dynamic, KEYNUM> PowerModelMatrix;
+typedef Eigen::Matrix<StatisticValueType, Eigen::Dynamic, KEYNUM> StatisticIndexMatrix;
 
 
