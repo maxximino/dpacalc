@@ -10,8 +10,8 @@ public:
     virtual void end();
     virtual void WriteBatch(unsigned long long id,shared_ptr<StatisticIndexMatrix> &s);
 protected:
-   std::vector<shared_ptr<Output::base> > outputs;
-   
+    std::vector<shared_ptr<Output::base> > outputs;
+
 };
 
 }
