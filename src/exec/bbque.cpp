@@ -25,6 +25,7 @@ cout << "BbqueClass initialized."<<endl;
 }
 RTLIB_ExitCode_t ExecMethod::BbqueClass::onConfigure(uint8_t awm_id)
 {
+  numthreads=awm_id+1;
 return RTLIB_OK;
 }
 RTLIB_ExitCode_t ExecMethod::BbqueClass::onMonitor()
@@ -33,7 +34,6 @@ return RTLIB_OK;
 }
 RTLIB_ExitCode_t ExecMethod::BbqueClass::onRun()
 {
-  int numCPU= sysconf( _SC_NPROCESSORS_ONLN ); // So che non è il metodo corretto.
  unsigned int oldnum;
   mtx.lock();
   
@@ -43,7 +43,7 @@ RTLIB_ExitCode_t ExecMethod::BbqueClass::onRun()
   }
   oldnum=num;
     vector<thread> thrs;
-    for(; num<oldnum+numCPU; num++) {
+    for(; num<oldnum+numthreads; num++) {
 	if(num >= tot){
 	  break;
 	}

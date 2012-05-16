@@ -20,6 +20,7 @@ public:
 protected:
 	unsigned long tot;
 	unsigned long num;
+	uint8_t numthreads;
  	std::mutex mtx;
   	RTLIB_ExitCode_t onSetup();
 	RTLIB_ExitCode_t onConfigure(uint8_t awm_id);
