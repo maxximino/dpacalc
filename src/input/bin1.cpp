@@ -96,7 +96,7 @@ void SamplesInput::bin1::populateQueue()
     unsigned long long cur_trace;
     unsigned long long mysample;
     queueelement qe = queueelement();
-    if(readytraces.size() > 30) {
+    if(readytraces.size() >= INPUT_QUEUE_SIZE) {
         return;
     }
     input_mutex.lock();

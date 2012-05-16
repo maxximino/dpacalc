@@ -28,7 +28,11 @@ menu "Basic settings"
 	    bool "Double"
   endchoice
 
-config NO_TRICKS 
+  config INPUT_QUEUE_SIZE
+  	int "How many batches should I prefetch from disk?"
+	default 30
+
+  config NO_TRICKS 
         bool "Disable non-semantically-correct but working optimitations"
 	default n
 
