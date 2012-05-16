@@ -4,8 +4,9 @@
 void Statistic::pearson::init ( shared_ptr< PowerModelMatrix >& _pm )
 {
 	Statistic::base::init ( _pm );
-	Eigen::Matrix<TraceValueType, 1, KEYNUM> pmaverage = Matrix<TraceValueType, 1, KEYNUM> ();
-	pmexpect = Matrix<TraceValueType, Dynamic, KEYNUM> ( pm->rows(), KEYNUM );
+	Eigen::Matrix<TraceValueType, 1, Dynamic> pmaverage = Matrix<TraceValueType, 1, Dynamic> (1,KEYNUM);
+	pmexpect = Matrix<TraceValueType, Dynamic, Dynamic> ( pm->rows(), KEYNUM );
+	pmexpect_bykey = Matrix<TraceValueType, Dynamic, Dynamic> ( 1, KEYNUM );
 	for ( long d = 0; d < KEYNUM; d++ ) {
 		pmaverage ( 0, d ) = pm->col ( d ).array().sum() / pm->col ( d ).array().count();
 	}
@@ -31,8 +32,8 @@ void Statistic::pearson::generate ( shared_ptr<StatisticIndexMatrix>& stat, shar
 	*/
 	assert ( numvalid <= BATCH_SIZE );
 	TraceValueType tavg;
-	auto dividendi = shared_ptr<Matrix<StatisticValueType, 1, KEYNUM> > ( new Matrix<StatisticValueType, 1, KEYNUM>() );
-	auto divisori = shared_ptr<Matrix<StatisticValueType, 1, KEYNUM> > ( new Matrix<StatisticValueType, 1, KEYNUM>() );
+	auto dividendi = shared_ptr<Matrix<StatisticValueType, 1, Dynamic> > ( new Matrix<StatisticValueType, 1, Dynamic>(1,KEYNUM) );
+	auto divisori = shared_ptr<Matrix<StatisticValueType, 1, Dynamic> > ( new Matrix<StatisticValueType, 1, Dynamic>(1,KEYNUM) );
 	for ( unsigned long long time = 0; time < numvalid; time++ ) {
 		tavg = traces->col ( time ).array().sum() / traces->col ( time ).array().count();
 		( *divisori ) = ( ( traces->col ( time ).array() - tavg ).matrix().squaredNorm() * pmexpect_bykey ).array().sqrt();

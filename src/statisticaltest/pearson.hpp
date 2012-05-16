@@ -13,8 +13,8 @@ namespace Statistic
 			pearson ( TCLAP::CmdLine& cmd ) : base ( cmd ) {};
 			virtual void init ( shared_ptr<PowerModelMatrix>& _pm );
 		protected:
-			Eigen::Matrix<TraceValueType, Eigen::Dynamic, KEYNUM> pmexpect;
-			Eigen::Matrix<TraceValueType, 1, KEYNUM> pmexpect_bykey;
+			Eigen::Matrix<TraceValueType, Dynamic, Dynamic> pmexpect;
+			Eigen::Matrix<TraceValueType, 1, Dynamic> pmexpect_bykey;
 	};
 }
 
