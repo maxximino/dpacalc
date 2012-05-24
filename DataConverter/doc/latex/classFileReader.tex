@@ -1,0 +1,143 @@
+\hypertarget{classFileReader}{
+\section{FileReader Class Reference}
+\label{classFileReader}\index{FileReader@{FileReader}}
+}
+
+
+This class parses Lecroy or Agilent files.  
+
+
+
+
+{\ttfamily \#include $<$FileReader.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classFileReader_a9b1556c5302286089c8407dca940dc2b}{FileReader} (\hyperlink{classFileConfigReader}{FileConfigReader} \&settings)
+\begin{DoxyCompactList}\small\item\em Creates a new object of the class. \end{DoxyCompactList}\item 
+\hyperlink{classFileReader_a1382969e8f1468f3b04ad4b44ab39dee}{$\sim$FileReader} ()
+\begin{DoxyCompactList}\small\item\em Class destructor. \end{DoxyCompactList}\item 
+\hyperlink{common_8h_a271e567655d46ec23cdcca42c1deab91}{UINTN} \hyperlink{classFileReader_a5a07f2601d01337aa0dd7bef5741bebb}{getNSample} ()
+\begin{DoxyCompactList}\small\item\em Returns the number of samples saved for each trace. \end{DoxyCompactList}\item 
+char \hyperlink{classFileReader_ac013c664548aa7ed856f6f2b6c886256}{getFormatType} ()
+\begin{DoxyCompactList}\small\item\em Returns the data format type. \end{DoxyCompactList}\item 
+\hyperlink{common_8h_a271e567655d46ec23cdcca42c1deab91}{UINTN} \hyperlink{classFileReader_a6f003c703cce9103b407dc2707847603}{getFormatSize} ()
+\begin{DoxyCompactList}\small\item\em Returns the size in bytes of the data format type. \end{DoxyCompactList}\item 
+vector$<$ uint8\_\-t $\ast$ $>$ \hyperlink{classFileReader_a1702a2bace29f33e72d6c75529617a01}{getTraces} ()
+\begin{DoxyCompactList}\small\item\em Returns the list of all the traces contained in the parsed files. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class parses Lecroy or Agilent files. 
+
+This class parses a list of files (Lecroy or Agilent), save the most important informations and then saves the traces of each file in a single vector. This vector is used to create the output files. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classFileReader_a9b1556c5302286089c8407dca940dc2b}{
+\index{FileReader@{FileReader}!FileReader@{FileReader}}
+\index{FileReader@{FileReader}!FileReader@{FileReader}}
+\subsubsection[{FileReader}]{\setlength{\rightskip}{0pt plus 5cm}FileReader::FileReader (
+\begin{DoxyParamCaption}
+\item[{{\bf FileConfigReader} \&}]{settings}
+\end{DoxyParamCaption}
+)}}
+\label{classFileReader_a9b1556c5302286089c8407dca940dc2b}
+
+
+Creates a new object of the class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em settings} & the file with the settings used to parse Lecroy/Agilent files. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classFileReader_a1382969e8f1468f3b04ad4b44ab39dee}{
+\index{FileReader@{FileReader}!$\sim$FileReader@{$\sim$FileReader}}
+\index{$\sim$FileReader@{$\sim$FileReader}!FileReader@{FileReader}}
+\subsubsection[{$\sim$FileReader}]{\setlength{\rightskip}{0pt plus 5cm}FileReader::$\sim$FileReader (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classFileReader_a1382969e8f1468f3b04ad4b44ab39dee}
+
+
+Class destructor. 
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classFileReader_a6f003c703cce9103b407dc2707847603}{
+\index{FileReader@{FileReader}!getFormatSize@{getFormatSize}}
+\index{getFormatSize@{getFormatSize}!FileReader@{FileReader}}
+\subsubsection[{getFormatSize}]{\setlength{\rightskip}{0pt plus 5cm}{\bf UINTN} FileReader::getFormatSize (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classFileReader_a6f003c703cce9103b407dc2707847603}
+
+
+Returns the size in bytes of the data format type. 
+
+\begin{DoxyReturn}{Returns}
+the size in byte of the data format type 
+\end{DoxyReturn}
+\hypertarget{classFileReader_ac013c664548aa7ed856f6f2b6c886256}{
+\index{FileReader@{FileReader}!getFormatType@{getFormatType}}
+\index{getFormatType@{getFormatType}!FileReader@{FileReader}}
+\subsubsection[{getFormatType}]{\setlength{\rightskip}{0pt plus 5cm}char FileReader::getFormatType (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classFileReader_ac013c664548aa7ed856f6f2b6c886256}
+
+
+Returns the data format type. 
+
+\begin{DoxyReturn}{Returns}
+the data format type several format types are available:\par
+ \begin{DoxyItemize}
+\item for Lecroy files: 'b' for int8 and 'c' for int16 \item for Agilent files: 'f' for float and 'd' for double \end{DoxyItemize}
+
+\end{DoxyReturn}
+\hypertarget{classFileReader_a5a07f2601d01337aa0dd7bef5741bebb}{
+\index{FileReader@{FileReader}!getNSample@{getNSample}}
+\index{getNSample@{getNSample}!FileReader@{FileReader}}
+\subsubsection[{getNSample}]{\setlength{\rightskip}{0pt plus 5cm}{\bf UINTN} FileReader::getNSample (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classFileReader_a5a07f2601d01337aa0dd7bef5741bebb}
+
+
+Returns the number of samples saved for each trace. 
+
+\begin{DoxyReturn}{Returns}
+the number of samples saved for each trace 
+\end{DoxyReturn}
+\hypertarget{classFileReader_a1702a2bace29f33e72d6c75529617a01}{
+\index{FileReader@{FileReader}!getTraces@{getTraces}}
+\index{getTraces@{getTraces}!FileReader@{FileReader}}
+\subsubsection[{getTraces}]{\setlength{\rightskip}{0pt plus 5cm}vector$<$ uint8\_\-t $\ast$ $>$ FileReader::getTraces (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classFileReader_a1702a2bace29f33e72d6c75529617a01}
+
+
+Returns the list of all the traces contained in the parsed files. 
+
+\begin{DoxyReturn}{Returns}
+the list of all the traces contained in the parsed files 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{FileReader_8h}{FileReader.h}\item 
+FileReader.cpp\end{DoxyCompactItemize}

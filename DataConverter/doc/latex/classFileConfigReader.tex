@@ -1,0 +1,250 @@
+\hypertarget{classFileConfigReader}{
+\section{FileConfigReader Class Reference}
+\label{classFileConfigReader}\index{FileConfigReader@{FileConfigReader}}
+}
+
+
+This class parses a converter configuration file.  
+
+
+
+
+{\ttfamily \#include $<$FileConfigReader.h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classFileConfigReader_ae83fe38cc761e9a0a7b95ae1ac0ecc43}{FileConfigReader} (const string \&file\_\-name)
+\begin{DoxyCompactList}\small\item\em Creates a new object of the class. \end{DoxyCompactList}\item 
+\hyperlink{classFileConfigReader_af4d6d93dfb299f95451d674a96963f37}{$\sim$FileConfigReader} ()
+\begin{DoxyCompactList}\small\item\em Class destructor. \end{DoxyCompactList}\item 
+\hyperlink{common_8h_a271e567655d46ec23cdcca42c1deab91}{UINTN} \hyperlink{classFileConfigReader_aac2a88c0bcab29cf36fe5bb43b5e373b}{getOutputTraceLength} ()
+\begin{DoxyCompactList}\small\item\em Returns the length of the trace to save. \end{DoxyCompactList}\item 
+\hyperlink{common_8h_a271e567655d46ec23cdcca42c1deab91}{UINTN} \hyperlink{classFileConfigReader_a563326884bf6888eb8986a05c29db8d4}{getOutputTraceOffset} ()
+\begin{DoxyCompactList}\small\item\em Returns the number of samples to ignore during the conversion. \end{DoxyCompactList}\item 
+\hyperlink{common_8h_a271e567655d46ec23cdcca42c1deab91}{UINTN} \hyperlink{classFileConfigReader_a86531cab49815921e99c1c10dc42961d}{getOutputTracePerFile} ()
+\begin{DoxyCompactList}\small\item\em Returns the number of traces to save in any output file. \end{DoxyCompactList}\item 
+string \hyperlink{classFileConfigReader_ada0fff82d3ac61d387cd13f40ada5bad}{getOutputPath} ()
+\begin{DoxyCompactList}\small\item\em Returns the location where the output files will be saved. \end{DoxyCompactList}\item 
+string \hyperlink{classFileConfigReader_a6cd39718f5bcfa0a29fd9a5e7b0f5e20}{getOutputName} ()
+\begin{DoxyCompactList}\small\item\em Returns the name of the output file to save. \end{DoxyCompactList}\item 
+int \hyperlink{classFileConfigReader_ac33a11b0630e7fd74be69179fc9b5634}{getInputFormat} ()
+\begin{DoxyCompactList}\small\item\em Returns the format of the input files (Lecroy, Agilent, txt). \end{DoxyCompactList}\item 
+vector$<$ string $>$ \hyperlink{classFileConfigReader_a36cc02e40332f97c5c8f8041247cea31}{getFileList} ()
+\begin{DoxyCompactList}\small\item\em Returns the list of the input files to convert with full path. \end{DoxyCompactList}\item 
+bool \hyperlink{classFileConfigReader_a66b21500ddf625da9b9aa665141bf75a}{keyExists} (const string \&key) const 
+\begin{DoxyCompactList}\small\item\em Checks if a key exists in the list of parsed keys. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename ValueType $>$ }\\ValueType \hyperlink{classFileConfigReader_a0c6b50cde92c7414955d52b6cb4504d8}{getValueOfKey} (const string \&key, ValueType const \&defaultValue=ValueType()) const 
+\begin{DoxyCompactList}\small\item\em Returns the value of a parsed key converted in ValueType. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class parses a converter configuration file. 
+
+The object created contains all the configuration settings used by the \hyperlink{classFileReader}{FileReader} Class to parse Lecroy/Agilent files \par
+ and used by the Converter to create the output files.\par
+ The configuration file must contain lines in this format:\par
+ \begin{DoxyItemize}
+\item the couple: keyValue = value \item the special key {\itshape 'file\_\-list\/}:' followed by a full path list of the Lecroy/Agilent files\par
+ \item a comment line starts with '\#' \end{DoxyItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classFileConfigReader_ae83fe38cc761e9a0a7b95ae1ac0ecc43}{
+\index{FileConfigReader@{FileConfigReader}!FileConfigReader@{FileConfigReader}}
+\index{FileConfigReader@{FileConfigReader}!FileConfigReader@{FileConfigReader}}
+\subsubsection[{FileConfigReader}]{\setlength{\rightskip}{0pt plus 5cm}FileConfigReader::FileConfigReader (
+\begin{DoxyParamCaption}
+\item[{const string \&}]{file\_\-name}
+\end{DoxyParamCaption}
+)}}
+\label{classFileConfigReader_ae83fe38cc761e9a0a7b95ae1ac0ecc43}
+
+
+Creates a new object of the class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\_\-name} & complete file name of the configuration file to parse \\
+\hline
+\end{DoxyParams}
+\hypertarget{classFileConfigReader_af4d6d93dfb299f95451d674a96963f37}{
+\index{FileConfigReader@{FileConfigReader}!$\sim$FileConfigReader@{$\sim$FileConfigReader}}
+\index{$\sim$FileConfigReader@{$\sim$FileConfigReader}!FileConfigReader@{FileConfigReader}}
+\subsubsection[{$\sim$FileConfigReader}]{\setlength{\rightskip}{0pt plus 5cm}FileConfigReader::$\sim$FileConfigReader (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classFileConfigReader_af4d6d93dfb299f95451d674a96963f37}
+
+
+Class destructor. 
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classFileConfigReader_a36cc02e40332f97c5c8f8041247cea31}{
+\index{FileConfigReader@{FileConfigReader}!getFileList@{getFileList}}
+\index{getFileList@{getFileList}!FileConfigReader@{FileConfigReader}}
+\subsubsection[{getFileList}]{\setlength{\rightskip}{0pt plus 5cm}vector$<$ string $>$ FileConfigReader::getFileList (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classFileConfigReader_a36cc02e40332f97c5c8f8041247cea31}
+
+
+Returns the list of the input files to convert with full path. 
+
+\begin{DoxyReturn}{Returns}
+the list of the input files to convert with full path 
+\end{DoxyReturn}
+\hypertarget{classFileConfigReader_ac33a11b0630e7fd74be69179fc9b5634}{
+\index{FileConfigReader@{FileConfigReader}!getInputFormat@{getInputFormat}}
+\index{getInputFormat@{getInputFormat}!FileConfigReader@{FileConfigReader}}
+\subsubsection[{getInputFormat}]{\setlength{\rightskip}{0pt plus 5cm}int FileConfigReader::getInputFormat (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classFileConfigReader_ac33a11b0630e7fd74be69179fc9b5634}
+
+
+Returns the format of the input files (Lecroy, Agilent, txt). 
+
+\begin{DoxyReturn}{Returns}
+the format of the input files (Lecroy, Agilent, txt) 
+\end{DoxyReturn}
+\hypertarget{classFileConfigReader_a6cd39718f5bcfa0a29fd9a5e7b0f5e20}{
+\index{FileConfigReader@{FileConfigReader}!getOutputName@{getOutputName}}
+\index{getOutputName@{getOutputName}!FileConfigReader@{FileConfigReader}}
+\subsubsection[{getOutputName}]{\setlength{\rightskip}{0pt plus 5cm}string FileConfigReader::getOutputName (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classFileConfigReader_a6cd39718f5bcfa0a29fd9a5e7b0f5e20}
+
+
+Returns the name of the output file to save. 
+
+\begin{DoxyReturn}{Returns}
+the name of the output file to save 
+\end{DoxyReturn}
+\hypertarget{classFileConfigReader_ada0fff82d3ac61d387cd13f40ada5bad}{
+\index{FileConfigReader@{FileConfigReader}!getOutputPath@{getOutputPath}}
+\index{getOutputPath@{getOutputPath}!FileConfigReader@{FileConfigReader}}
+\subsubsection[{getOutputPath}]{\setlength{\rightskip}{0pt plus 5cm}string FileConfigReader::getOutputPath (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classFileConfigReader_ada0fff82d3ac61d387cd13f40ada5bad}
+
+
+Returns the location where the output files will be saved. 
+
+\begin{DoxyReturn}{Returns}
+the location where the output files will be saved 
+\end{DoxyReturn}
+\hypertarget{classFileConfigReader_aac2a88c0bcab29cf36fe5bb43b5e373b}{
+\index{FileConfigReader@{FileConfigReader}!getOutputTraceLength@{getOutputTraceLength}}
+\index{getOutputTraceLength@{getOutputTraceLength}!FileConfigReader@{FileConfigReader}}
+\subsubsection[{getOutputTraceLength}]{\setlength{\rightskip}{0pt plus 5cm}{\bf UINTN} FileConfigReader::getOutputTraceLength (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classFileConfigReader_aac2a88c0bcab29cf36fe5bb43b5e373b}
+
+
+Returns the length of the trace to save. 
+
+\begin{DoxyReturn}{Returns}
+the length of the trace to save in number of samples 
+\end{DoxyReturn}
+\hypertarget{classFileConfigReader_a563326884bf6888eb8986a05c29db8d4}{
+\index{FileConfigReader@{FileConfigReader}!getOutputTraceOffset@{getOutputTraceOffset}}
+\index{getOutputTraceOffset@{getOutputTraceOffset}!FileConfigReader@{FileConfigReader}}
+\subsubsection[{getOutputTraceOffset}]{\setlength{\rightskip}{0pt plus 5cm}{\bf UINTN} FileConfigReader::getOutputTraceOffset (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classFileConfigReader_a563326884bf6888eb8986a05c29db8d4}
+
+
+Returns the number of samples to ignore during the conversion. 
+
+\begin{DoxyReturn}{Returns}
+the number of samples to ignore during the conversion 
+\end{DoxyReturn}
+\hypertarget{classFileConfigReader_a86531cab49815921e99c1c10dc42961d}{
+\index{FileConfigReader@{FileConfigReader}!getOutputTracePerFile@{getOutputTracePerFile}}
+\index{getOutputTracePerFile@{getOutputTracePerFile}!FileConfigReader@{FileConfigReader}}
+\subsubsection[{getOutputTracePerFile}]{\setlength{\rightskip}{0pt plus 5cm}{\bf UINTN} FileConfigReader::getOutputTracePerFile (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classFileConfigReader_a86531cab49815921e99c1c10dc42961d}
+
+
+Returns the number of traces to save in any output file. 
+
+\begin{DoxyReturn}{Returns}
+the number of traces to save in any output file 
+\end{DoxyReturn}
+\hypertarget{classFileConfigReader_a0c6b50cde92c7414955d52b6cb4504d8}{
+\index{FileConfigReader@{FileConfigReader}!getValueOfKey@{getValueOfKey}}
+\index{getValueOfKey@{getValueOfKey}!FileConfigReader@{FileConfigReader}}
+\subsubsection[{getValueOfKey}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename ValueType $>$ ValueType FileConfigReader::getValueOfKey (
+\begin{DoxyParamCaption}
+\item[{const string \&}]{key, }
+\item[{ValueType const \&}]{defaultValue = {\ttfamily ValueType()}}
+\end{DoxyParamCaption}
+) const}}
+\label{classFileConfigReader_a0c6b50cde92c7414955d52b6cb4504d8}
+
+
+Returns the value of a parsed key converted in ValueType. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & name of the key \\
+\hline
+{\em ValueType} & data type of the value of the key \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of a parsed key converted in ValueType this function uses a template to get the value of the key converted in the desidered type. \par
+ used type: unsigned int, string. 
+\end{DoxyReturn}
+\hypertarget{classFileConfigReader_a66b21500ddf625da9b9aa665141bf75a}{
+\index{FileConfigReader@{FileConfigReader}!keyExists@{keyExists}}
+\index{keyExists@{keyExists}!FileConfigReader@{FileConfigReader}}
+\subsubsection[{keyExists}]{\setlength{\rightskip}{0pt plus 5cm}bool FileConfigReader::keyExists (
+\begin{DoxyParamCaption}
+\item[{const string \&}]{key}
+\end{DoxyParamCaption}
+) const}}
+\label{classFileConfigReader_a66b21500ddf625da9b9aa665141bf75a}
+
+
+Checks if a key exists in the list of parsed keys. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & name of the key \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the key was parsed, false otherwise 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{FileConfigReader_8h}{FileConfigReader.h}\item 
+FileConfigReader.cpp\end{DoxyCompactItemize}

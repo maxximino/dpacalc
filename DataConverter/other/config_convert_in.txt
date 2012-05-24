@@ -1,0 +1,18 @@
+output_trace_length = 10000
+output_trace_offset = 0
+output_traces_per_file = 8
+output_path = /home/cuda_dpa/project/DataConverter/save
+output_name = out.bin
+input_format = lecroy
+file_list:
+/home/cuda_dpa/project/DataConverter/other/traces/Scenario_sample0001__Repetition_1_Ch3_Avg_Sweep_16_X_40673.0_Y_-23854.8.trc
+/home/cuda_dpa/project/DataConverter/other/traces/Scenario_sample0002__Repetition_1_Ch3_Avg_Sweep_16_X_40673.0_Y_-23854.8.trc
+/home/cuda_dpa/project/DataConverter/other/traces/Scenario_sample0003__Repetition_1_Ch3_Avg_Sweep_16_X_40673.0_Y_-23854.8.trc
+/home/cuda_dpa/project/DataConverter/other/traces/Scenario_sample0004__Repetition_1_Ch3_Avg_Sweep_16_X_40673.0_Y_-23854.8.trc
+/home/cuda_dpa/project/DataConverter/other/traces/Scenario_sample0005__Repetition_1_Ch3_Avg_Sweep_16_X_40673.0_Y_-23854.8.trc
+/home/cuda_dpa/project/DataConverter/other/traces/Scenario_sample0006__Repetition_1_Ch3_Avg_Sweep_16_X_40673.0_Y_-23854.8.trc
+/home/cuda_dpa/project/DataConverter/other/traces/Scenario_sample0007__Repetition_1_Ch3_Avg_Sweep_16_X_40673.0_Y_-23854.8.trc
+/home/cuda_dpa/project/DataConverter/other/traces/Scenario_sample0008__Repetition_1_Ch3_Avg_Sweep_16_X_40673.0_Y_-23854.8.trc
+
+
+
