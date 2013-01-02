@@ -14,23 +14,3 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
-#pragma once
-#include "dpacalc.h"
-#include <bitset>
-#include <iostream>
-namespace KeyGenerators
-{
-	class base
-	{
-		public:
-			base ( TCLAP::CmdLine& cmd ) {};
-			virtual void init() {};
-			virtual  KeyDataType getKeyFromIndex ( KeyIndexType idx ) = 0;
-			virtual std::string getKeyAsString ( KeyIndexType idx ) {
-				std::stringstream s;
-				s << std::hex;
-				s << idx;
-				return s.str();
-			};
-	};
-}
